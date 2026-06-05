@@ -3,32 +3,37 @@ workflows:
     name: "Ios Release"
     integrations:
       app_store_connect: NEZHA FAHSI
+
     environment:
       flutter: 3.41.0
       ios_signing:
+        distribution_type: app_store
         provisioning_profiles:
           - provisioning_xrecorder
+          - xrecorder_broadcast_extension
+          - xrecorder_broadcast_setup_ui
         certificates:
           - Certificate_nezha
+
     scripts:
-      - name: Set up code signing settings on Xcode project
-        script: xcode-project use-profiles
       - name: Get Flutter packages
         script: flutter packages pub get
-      - name: Set up code signing
+
+      - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
+
       - name: Build IPA
         script: flutter build ipa --release --export-options-plist=/Users/builder/export_options.plist
+
     artifacts:
       - build/ios/ipa/*.ipa
+
     publishing:
       email:
         recipients:
-          - moufarijamix50@gmail.com
+          - wallora4kWallpaper@outlook.com
         notify:
           success: true
           failure: true
       app_store_connect:
         auth: integration
-
-
