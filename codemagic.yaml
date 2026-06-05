@@ -9,7 +9,7 @@ workflows:
         provisioning_profiles:
           - provisioning_xrecorder
         certificates:
-          - Certificate_zouhir
+          - Certificate_nezha
     scripts:
       - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
