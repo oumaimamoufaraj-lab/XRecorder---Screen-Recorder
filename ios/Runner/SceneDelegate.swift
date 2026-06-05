@@ -6,7 +6,7 @@ import Photos
 class SceneDelegate: FlutterSceneDelegate {
   private let replayKitChannelName = "xrecorder/replaykit"
   private let replayKitExtensionBundleIdKey = "ReplayKitBroadcastExtensionBundleId"
-  private let appGroupId = "group.com.xrecorder.screenVideo"
+  private let appGroupId = "group.com.xrecorder.screenvideo.shared"
   private let broadcastStatusKey = "replaykit_broadcast_status"
   private let lastSavedPathKey = "replaykit_last_saved_path"
   private let shouldRefreshVideosKey = "replaykit_should_refresh_videos"

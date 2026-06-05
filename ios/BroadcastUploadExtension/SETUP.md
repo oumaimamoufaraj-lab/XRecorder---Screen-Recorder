@@ -14,10 +14,10 @@ The extension target must be added in Xcode (project settings) because `Runner.x
 6. Set extension bundle id to: `com.xrecorder.screenVideo.BroadcastUploadExtension`.
 7. In the app target (`Runner`) Signing & Capabilities:
    - keep `Runner/Runner.entitlements` attached
-   - enable App Groups and add: `group.com.xrecorder.screenVideo`
+   - enable App Groups and add: `group.com.xrecorder.screenvideo.shared`
 8. In extension target Signing & Capabilities:
    - match team
-   - enable App Groups and add the same: `group.com.xrecorder.screenVideo`
+   - enable App Groups and add the same: `group.com.xrecorder.screenvideo.shared`
 
 ## Flutter side
 The Flutter app already exposes an **iOS Broadcast Picker (ReplayKit)** button on Record screen via native channel (`xrecorder/replaykit`).

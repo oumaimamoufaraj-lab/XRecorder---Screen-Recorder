@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -107,14 +107,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		18631E0C2FCD37070001E193 /* Exceptions for "BroadcastUploadExtension" folder in "BroadcastUploadExtension" target */ = {
+		18631E0C2FCD37070001E193 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = 18631DEB2FCD37070001E193 /* BroadcastUploadExtension */;
 		};
-		18631E0E2FCD37070001E193 /* Exceptions for "BroadcastUploadExtensionSetupUI" folder in "BroadcastUploadExtensionSetupUI" target */ = {
+		18631E0E2FCD37070001E193 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -124,30 +124,8 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		18631DEF2FCD37070001E193 /* BroadcastUploadExtension */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				18631E0C2FCD37070001E193 /* Exceptions for "BroadcastUploadExtension" folder in "BroadcastUploadExtension" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = BroadcastUploadExtension;
-			sourceTree = "<group>";
-		};
-		18631DFB2FCD37070001E193 /* BroadcastUploadExtensionSetupUI */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				18631E0E2FCD37070001E193 /* Exceptions for "BroadcastUploadExtensionSetupUI" folder in "BroadcastUploadExtensionSetupUI" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = BroadcastUploadExtensionSetupUI;
-			sourceTree = "<group>";
-		};
+		18631DEF2FCD37070001E193 /* BroadcastUploadExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (18631E0C2FCD37070001E193 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BroadcastUploadExtension; sourceTree = "<group>"; };
+		18631DFB2FCD37070001E193 /* BroadcastUploadExtensionSetupUI */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (18631E0E2FCD37070001E193 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BroadcastUploadExtensionSetupUI; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -756,6 +734,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = BroadcastUploadExtensionSetupUI/BroadcastUploadExtensionSetupUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 49B45VHG69;
@@ -796,6 +775,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = BroadcastUploadExtensionSetupUI/BroadcastUploadExtensionSetupUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 49B45VHG69;
@@ -833,6 +813,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = BroadcastUploadExtensionSetupUI/BroadcastUploadExtensionSetupUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 49B45VHG69;

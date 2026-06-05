@@ -3,7 +3,7 @@ import Foundation
 
 /// Reads broadcast audio debug values written by the extension (App Group).
 enum BroadcastAudioDebugReader {
-  private static let appGroupId = "group.com.xrecorder.screenVideo"
+  private static let appGroupId = "group.com.xrecorder.screenvideo.shared"
 
   private enum Key {
     static let audioMode = "replaykit_broadcast_audio_mode"

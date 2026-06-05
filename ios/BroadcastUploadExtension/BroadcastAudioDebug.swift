@@ -3,7 +3,7 @@ import Foundation
 
 /// App Group keys shared with the main app (Runner reads the same strings).
 enum BroadcastAudioDebugKeys {
-  static let appGroupId = "group.com.xrecorder.screenVideo"
+  static let appGroupId = "group.com.xrecorder.screenvideo.shared"
   static let audioMode = "replaykit_broadcast_audio_mode"
   static let receivedAudioApp = "replaykit_debug_received_audio_app"
   static let receivedAudioMic = "replaykit_debug_received_audio_mic"
