@@ -396,7 +396,7 @@ class SceneDelegate: FlutterSceneDelegate {
         }
 
         if allowPreferredFallback, preferredExtension != nil {
-          let embeddedId = self.embeddedBroadcastUploadExtensionBundleId()
+          let embeddedId = self.embeddedcom.xrecorder.screenVideo.BroadcastExtensionBundleId()
           if embeddedId != preferredExtension {
             self.presentBroadcastActivityPicker(
               preferredExtension: embeddedId,
@@ -417,7 +417,7 @@ class SceneDelegate: FlutterSceneDelegate {
         let fallbackReason = error?.localizedDescription
           ?? "Broadcast activity controller unavailable."
         self.presentLegacyBroadcastPicker(
-          preferredExtension: self.embeddedBroadcastUploadExtensionBundleId(),
+          preferredExtension: self.embeddedcom.xrecorder.screenVideo.BroadcastExtensionBundleId(),
           result: result,
           fallbackReason: fallbackReason
         )
@@ -426,7 +426,7 @@ class SceneDelegate: FlutterSceneDelegate {
   }
 
   private func resolvedBroadcastExtensionBundleId() -> String? {
-    if let embeddedId = embeddedBroadcastUploadExtensionBundleId() {
+    if let embeddedId = embeddedcom.xrecorder.screenVideo.BroadcastExtensionBundleId() {
       return embeddedId
     }
 
@@ -435,7 +435,7 @@ class SceneDelegate: FlutterSceneDelegate {
     ) as? String
   }
 
-  private func embeddedBroadcastUploadExtensionBundleId() -> String? {
+  private func embeddedcom.xrecorder.screenVideo.BroadcastExtensionBundleId() -> String? {
     guard let pluginsURL = Bundle.main.builtInPlugInsURL,
           let pluginURLs = try? FileManager.default.contentsOfDirectory(
             at: pluginsURL,

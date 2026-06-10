@@ -11,8 +11,8 @@
 		18631DEE2FCD37070001E193 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18631DED2FCD37070001E193 /* ReplayKit.framework */; };
 		18631DF82FCD37070001E193 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18631DED2FCD37070001E193 /* ReplayKit.framework */; };
 		18631DFA2FCD37070001E193 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18631DF92FCD37070001E193 /* UIKit.framework */; };
-		18631E012FCD37070001E193 /* BroadcastUploadExtensionSetupUI.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 18631DF72FCD37070001E193 /* BroadcastUploadExtensionSetupUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		18631E042FCD37070001E193 /* BroadcastUploadExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 18631DEC2FCD37070001E193 /* BroadcastUploadExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		18631E012FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 18631DF72FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		18631E042FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 18631DEC2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		60C10AA92D59A68BF36BEB21 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B11239CE9C318BCECDBB72D8 /* Pods_RunnerTests.framework */; };
@@ -31,14 +31,14 @@
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 18631DF62FCD37070001E193;
-			remoteInfo = BroadcastUploadExtensionSetupUI;
+			remoteInfo = com.xrecorder.screenVideo.BroadcastExtensionSetupUI;
 		};
 		18631E022FCD37070001E193 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 18631DEB2FCD37070001E193;
-			remoteInfo = BroadcastUploadExtension;
+			remoteInfo = com.xrecorder.screenVideo.BroadcastExtension;
 		};
 		331C8085294A63A400263BE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -56,8 +56,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				18631E012FCD37070001E193 /* BroadcastUploadExtensionSetupUI.appex in Embed Foundation Extensions */,
-				18631E042FCD37070001E193 /* BroadcastUploadExtension.appex in Embed Foundation Extensions */,
+				18631E012FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI.appex in Embed Foundation Extensions */,
+				18631E042FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,9 +77,9 @@
 /* Begin PBXFileReference section */
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
-		18631DEC2FCD37070001E193 /* BroadcastUploadExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BroadcastUploadExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		18631DEC2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = com.xrecorder.screenVideo.BroadcastExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		18631DED2FCD37070001E193 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
-		18631DF72FCD37070001E193 /* BroadcastUploadExtensionSetupUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BroadcastUploadExtensionSetupUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		18631DF72FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = com.xrecorder.screenVideo.BroadcastExtensionSetupUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		18631DF92FCD37070001E193 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,20 +112,20 @@
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 18631DEB2FCD37070001E193 /* BroadcastUploadExtension */;
+			target = 18631DEB2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension */;
 		};
 		18631E0E2FCD37070001E193 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 18631DF62FCD37070001E193 /* BroadcastUploadExtensionSetupUI */;
+			target = 18631DF62FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		18631DEF2FCD37070001E193 /* BroadcastUploadExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (18631E0C2FCD37070001E193 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BroadcastUploadExtension; sourceTree = "<group>"; };
-		18631DFB2FCD37070001E193 /* BroadcastUploadExtensionSetupUI */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (18631E0E2FCD37070001E193 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BroadcastUploadExtensionSetupUI; sourceTree = "<group>"; };
+		18631DEF2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (18631E0C2FCD37070001E193 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = com.xrecorder.screenVideo.BroadcastExtension; sourceTree = "<group>"; };
+		18631DFB2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (18631E0E2FCD37070001E193 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = com.xrecorder.screenVideo.BroadcastExtensionSetupUI; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,8 +202,8 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
-				18631DEF2FCD37070001E193 /* BroadcastUploadExtension */,
-				18631DFB2FCD37070001E193 /* BroadcastUploadExtensionSetupUI */,
+				18631DEF2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension */,
+				18631DFB2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI */,
 				97C146EF1CF9000F007C117D /* Products */,
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				36EDFE40A05FC934E3F68F13 /* Pods */,
@@ -216,8 +216,8 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
-				18631DEC2FCD37070001E193 /* BroadcastUploadExtension.appex */,
-				18631DF72FCD37070001E193 /* BroadcastUploadExtensionSetupUI.appex */,
+				18631DEC2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension.appex */,
+				18631DF72FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -253,9 +253,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		18631DEB2FCD37070001E193 /* BroadcastUploadExtension */ = {
+		18631DEB2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 18631E0D2FCD37070001E193 /* Build configuration list for PBXNativeTarget "BroadcastUploadExtension" */;
+			buildConfigurationList = 18631E0D2FCD37070001E193 /* Build configuration list for PBXNativeTarget "com.xrecorder.screenVideo.BroadcastExtension" */;
 			buildPhases = (
 				18631DE82FCD37070001E193 /* Sources */,
 				18631DE92FCD37070001E193 /* Frameworks */,
@@ -266,16 +266,16 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				18631DEF2FCD37070001E193 /* BroadcastUploadExtension */,
+				18631DEF2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension */,
 			);
-			name = BroadcastUploadExtension;
-			productName = BroadcastUploadExtension;
-			productReference = 18631DEC2FCD37070001E193 /* BroadcastUploadExtension.appex */;
+			name = com.xrecorder.screenVideo.BroadcastExtension;
+			productName = com.xrecorder.screenVideo.BroadcastExtension;
+			productReference = 18631DEC2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		18631DF62FCD37070001E193 /* BroadcastUploadExtensionSetupUI */ = {
+		18631DF62FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 18631E0F2FCD37070001E193 /* Build configuration list for PBXNativeTarget "BroadcastUploadExtensionSetupUI" */;
+			buildConfigurationList = 18631E0F2FCD37070001E193 /* Build configuration list for PBXNativeTarget "com.xrecorder.screenVideo.BroadcastExtensionSetupUI" */;
 			buildPhases = (
 				18631DF32FCD37070001E193 /* Sources */,
 				18631DF42FCD37070001E193 /* Frameworks */,
@@ -286,11 +286,11 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				18631DFB2FCD37070001E193 /* BroadcastUploadExtensionSetupUI */,
+				18631DFB2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI */,
 			);
-			name = BroadcastUploadExtensionSetupUI;
-			productName = BroadcastUploadExtensionSetupUI;
-			productReference = 18631DF72FCD37070001E193 /* BroadcastUploadExtensionSetupUI.appex */;
+			name = com.xrecorder.screenVideo.BroadcastExtensionSetupUI;
+			productName = com.xrecorder.screenVideo.BroadcastExtensionSetupUI;
+			productReference = 18631DF72FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		331C8080294A63A400263BE5 /* RunnerTests */ = {
@@ -380,8 +380,8 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
-				18631DEB2FCD37070001E193 /* BroadcastUploadExtension */,
-				18631DF62FCD37070001E193 /* BroadcastUploadExtensionSetupUI */,
+				18631DEB2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension */,
+				18631DF62FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI */,
 			);
 		};
 /* End PBXProject section */
@@ -572,12 +572,12 @@
 /* Begin PBXTargetDependency section */
 		18631E002FCD37070001E193 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 18631DF62FCD37070001E193 /* BroadcastUploadExtensionSetupUI */;
+			target = 18631DF62FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtensionSetupUI */;
 			targetProxy = 18631DFF2FCD37070001E193 /* PBXContainerItemProxy */;
 		};
 		18631E032FCD37070001E193 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 18631DEB2FCD37070001E193 /* BroadcastUploadExtension */;
+			target = 18631DEB2FCD37070001E193 /* com.xrecorder.screenVideo.BroadcastExtension */;
 			targetProxy = 18631E022FCD37070001E193 /* PBXContainerItemProxy */;
 		};
 		331C8086294A63A400263BE5 /* PBXTargetDependency */ = {
@@ -617,14 +617,14 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = BroadcastUploadExtension/BroadcastUploadExtensionDebug.entitlements;
+				CODE_SIGN_ENTITLEMENTS = com.xrecorder.screenVideo.BroadcastExtension/com.xrecorder.screenVideo.BroadcastExtensionDebug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 49B45VHG69;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BroadcastUploadExtension/Info.plist;
+				INFOPLIST_FILE = com.xrecorder.screenVideo.BroadcastExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
@@ -658,14 +658,14 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = BroadcastUploadExtension/BroadcastUploadExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = com.xrecorder.screenVideo.BroadcastExtension/com.xrecorder.screenVideo.BroadcastExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 49B45VHG69;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BroadcastUploadExtension/Info.plist;
+				INFOPLIST_FILE = com.xrecorder.screenVideo.BroadcastExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
@@ -677,7 +677,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.xrecorder.screenVideo.BroadcastUploadExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xrecorder.screenVideo.com.xrecorder.screenVideo.BroadcastExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -696,14 +696,14 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = BroadcastUploadExtension/BroadcastUploadExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = com.xrecorder.screenVideo.BroadcastExtension/com.xrecorder.screenVideo.BroadcastExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 49B45VHG69;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BroadcastUploadExtension/Info.plist;
+				INFOPLIST_FILE = com.xrecorder.screenVideo.BroadcastExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
@@ -715,7 +715,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.xrecorder.screenVideo.BroadcastUploadExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xrecorder.screenVideo.com.xrecorder.screenVideo.BroadcastExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -734,14 +734,14 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = BroadcastUploadExtensionSetupUI/BroadcastUploadExtensionSetupUI.entitlements;
+				CODE_SIGN_ENTITLEMENTS = com.xrecorder.screenVideo.BroadcastExtensionSetupUI/com.xrecorder.screenVideo.BroadcastExtensionSetupUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 49B45VHG69;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BroadcastUploadExtensionSetupUI/Info.plist;
+				INFOPLIST_FILE = com.xrecorder.screenVideo.BroadcastExtensionSetupUI/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
@@ -754,7 +754,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.xrecorder.screenVideo.BroadcastUploadExtensionSetupUI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xrecorder.screenVideo.com.xrecorder.screenVideo.BroadcastExtensionSetupUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -775,14 +775,14 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = BroadcastUploadExtensionSetupUI/BroadcastUploadExtensionSetupUI.entitlements;
+				CODE_SIGN_ENTITLEMENTS = com.xrecorder.screenVideo.BroadcastExtensionSetupUI/com.xrecorder.screenVideo.BroadcastExtensionSetupUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 49B45VHG69;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BroadcastUploadExtensionSetupUI/Info.plist;
+				INFOPLIST_FILE = com.xrecorder.screenVideo.BroadcastExtensionSetupUI/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
@@ -794,7 +794,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.xrecorder.screenVideo.BroadcastUploadExtensionSetupUI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xrecorder.screenVideo.com.xrecorder.screenVideo.BroadcastExtensionSetupUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -813,14 +813,14 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = BroadcastUploadExtensionSetupUI/BroadcastUploadExtensionSetupUI.entitlements;
+				CODE_SIGN_ENTITLEMENTS = com.xrecorder.screenVideo.BroadcastExtensionSetupUI/com.xrecorder.screenVideo.BroadcastExtensionSetupUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 49B45VHG69;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BroadcastUploadExtensionSetupUI/Info.plist;
+				INFOPLIST_FILE = com.xrecorder.screenVideo.BroadcastExtensionSetupUI/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
@@ -832,7 +832,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.xrecorder.screenVideo.BroadcastUploadExtensionSetupUI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xrecorder.screenVideo.com.xrecorder.screenVideo.BroadcastExtensionSetupUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1127,7 +1127,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		18631E0D2FCD37070001E193 /* Build configuration list for PBXNativeTarget "BroadcastUploadExtension" */ = {
+		18631E0D2FCD37070001E193 /* Build configuration list for PBXNativeTarget "com.xrecorder.screenVideo.BroadcastExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				18631E062FCD37070001E193 /* Debug */,
@@ -1137,7 +1137,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		18631E0F2FCD37070001E193 /* Build configuration list for PBXNativeTarget "BroadcastUploadExtensionSetupUI" */ = {
+		18631E0F2FCD37070001E193 /* Build configuration list for PBXNativeTarget "com.xrecorder.screenVideo.BroadcastExtensionSetupUI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				18631E092FCD37070001E193 /* Debug */,

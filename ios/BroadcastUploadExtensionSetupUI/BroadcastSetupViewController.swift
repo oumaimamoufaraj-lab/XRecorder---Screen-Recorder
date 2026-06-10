@@ -1,6 +1,6 @@
 //
 //  BroadcastSetupViewController.swift
-//  BroadcastUploadExtensionSetupUI
+//  com.xrecorder.screenVideo.BroadcastExtensionSetupUI
 //
 
 import ReplayKit
