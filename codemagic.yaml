@@ -10,7 +10,7 @@ workflows:
         distribution_type: app_store
         provisioning_profiles:
           - provisioning_xrecorder
-          - xrecorder_broadcast_extension
+          - xrecorder_broadcast_upload_extension
           - xrecorder_broadcast_setup_ui
         certificates:
           - Certificate_nezha
