@@ -27,7 +27,8 @@ class RecordScreen extends StatefulWidget {
   State<RecordScreen> createState() => _RecordScreenState();
 }
 
-class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver {
+class _RecordScreenState extends State<RecordScreen>
+    with WidgetsBindingObserver {
   final RecordingService _recordingService = RecordingService();
   final ReplayKitService _replayKitService = ReplayKitService();
   bool _isRecording = false;
@@ -40,7 +41,8 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
   String _previousBroadcastStatus = 'idle';
   BroadcastAudioTestMode _broadcastAudioMode = BroadcastAudioTestMode.micOnly;
 
-  bool get _showBroadcastDebugTools => BuildFeatures.showBroadcastAudioDebugTools;
+  bool get _showBroadcastDebugTools =>
+      BuildFeatures.showBroadcastAudioDebugTools;
 
   /// Release uses micOnly (confirmed working). Developer tools can override for testing.
   BroadcastAudioTestMode get _activeBroadcastAudioMode {
@@ -223,7 +225,9 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
     if (!mounted) return;
     if (imported) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Recording saved to Photos. Check the Videos tab.')),
+        const SnackBar(
+          content: Text('Recording saved to Photos. Check the Videos tab.'),
+        ),
       );
     }
   }
@@ -240,7 +244,11 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
         content: SingleChildScrollView(
           child: SelectableText(
             '${report.summaryText}\nDiagnosis: ${report.diagnosisHint}',
-            style: const TextStyle(fontFamily: 'Menlo', fontSize: 12, height: 1.35),
+            style: const TextStyle(
+              fontFamily: 'Menlo',
+              fontSize: 12,
+              height: 1.35,
+            ),
           ),
         ),
         actions: [
@@ -302,7 +310,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
           'iOS will ask you to confirm screen broadcast.\n\n'
           '1. Tap Continue to open Apple’s broadcast menu.\n'
           '2. Turn Microphone ON (required for audio).\n'
-          '3. Select XRecorder (BroadcastUploadExtension).\n'
+          '3. Select XRecorder in the list.\n'
           '4. Tap Start Broadcast.\n'
           '5. Stop from the red status bar or Control Center.',
         ),
@@ -316,14 +324,22 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
               final navigator = Navigator.of(context);
               final messenger = ScaffoldMessenger.of(context);
               navigator.pop();
-              await _replayKitService.setBroadcastAudioMode(_activeBroadcastAudioMode);
+              await _replayKitService.setBroadcastAudioMode(
+                _activeBroadcastAudioMode,
+              );
               final result = await _recordingService.startFullDeviceRecording();
               if (!mounted) return;
               if (result.success) {
-                setState(() => _statusText = 'Confirm broadcast in Apple’s picker');
+                setState(
+                  () => _statusText = 'Confirm broadcast in Apple’s picker',
+                );
               } else {
                 messenger.showSnackBar(
-                  SnackBar(content: Text(result.error ?? 'Could not open broadcast picker.')),
+                  SnackBar(
+                    content: Text(
+                      result.error ?? 'Could not open broadcast picker.',
+                    ),
+                  ),
                 );
               }
             },
@@ -375,7 +391,9 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
             _statusText = 'Ready to record';
           });
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(result.error ?? 'Failed to stop recording.')),
+            SnackBar(
+              content: Text(result.error ?? 'Failed to stop recording.'),
+            ),
           );
         }
         return;
@@ -475,7 +493,9 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result.error ?? 'Could not start in-app recording.')),
+        SnackBar(
+          content: Text(result.error ?? 'Could not start in-app recording.'),
+        ),
       );
     }
   }
@@ -496,12 +516,17 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
                 decoration: BoxDecoration(
                   color: palette.simulatorBannerBg,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.primaryOrange.withValues(alpha: 0.4)),
+                  border: Border.all(
+                    color: AppColors.primaryOrange.withValues(alpha: 0.4),
+                  ),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.phone_iphone, color: AppColors.primaryOrange),
+                    const Icon(
+                      Icons.phone_iphone,
+                      color: AppColors.primaryOrange,
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
@@ -529,7 +554,11 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
                     color: palette.logoBackground,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const BrandLogo(size: 34, radius: 10, withShadow: false),
+                  child: const BrandLogo(
+                    size: 34,
+                    radius: 10,
+                    withShadow: false,
+                  ),
                 ),
                 const Spacer(),
                 _RecordHeaderIconButton(
@@ -605,10 +634,10 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
                   Text(
                     Platform.isIOS
                         ? (_broadcastActive
-                            ? 'Stop via the red status bar or Control Center'
-                            : _appOnlyRecording
-                            ? 'Tap Stop to save this in-app session'
-                            : 'Tap Start — turn Microphone ON in Apple’s broadcast sheet')
+                              ? 'Stop via the red status bar or Control Center'
+                              : _appOnlyRecording
+                              ? 'Tap Stop to save this in-app session'
+                              : 'Tap Start — turn Microphone ON in Apple’s broadcast sheet')
                         : _isRecording
                         ? 'Tap stop to finish and save video'
                         : 'Tap the button below to start',
@@ -623,9 +652,8 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
             if (Platform.isIOS && _broadcastActive) ...[
               const SizedBox(height: 16),
               BroadcastActiveBanner(
-                onHowToStop: () => AdActionService.runWithInterstitial(
-                  _showBroadcastStopHelp,
-                ),
+                onHowToStop: () =>
+                    AdActionService.runWithInterstitial(_showBroadcastStopHelp),
               ),
             ],
             const SizedBox(height: 24),
@@ -635,7 +663,8 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
                   selectedMode: _broadcastAudioMode,
                   enabled: !_broadcastActive && !_appOnlyRecording,
                   onModeChanged: _onBroadcastAudioModeChanged,
-                  onViewReport: () => unawaited(_showBroadcastAudioDebugReport()),
+                  onViewReport: () =>
+                      unawaited(_showBroadcastAudioDebugReport()),
                 ),
                 const SizedBox(height: 12),
               ],
@@ -644,9 +673,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
                 child: OutlinedButton.icon(
                   onPressed: (_broadcastActive || _appOnlyRecording)
                       ? null
-                      : () => AdActionService.runWithRewardedAsync(
-                          _startAppOnlyRecording,
-                        ),
+                      : _startAppOnlyRecording,
                   icon: const Icon(Icons.smartphone_rounded),
                   label: const Text('Record app only (optional)'),
                   style: OutlinedButton.styleFrom(
@@ -675,9 +702,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
                             _showBroadcastStopHelp,
                           );
                         } else {
-                          AdActionService.runWithRewardedAsync(
-                            _toggleRecording,
-                          );
+                          _toggleRecording();
                         }
                       },
                 icon: Icon(
@@ -821,7 +846,8 @@ class _BroadcastStatusChipState extends State<_BroadcastStatusChip>
     return AnimatedBuilder(
       animation: _pulseController,
       builder: (context, child) {
-        final isActive = widget.isRecording || widget.statusText == 'Recording...';
+        final isActive =
+            widget.isRecording || widget.statusText == 'Recording...';
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(

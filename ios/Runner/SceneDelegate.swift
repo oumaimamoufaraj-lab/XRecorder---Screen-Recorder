@@ -16,6 +16,7 @@ class SceneDelegate: FlutterSceneDelegate {
   private var photosChannel: FlutterMethodChannel?
   private var inAppRecordingActive = false
   private var isImportingBroadcastVideo = false
+  private var pendingBroadcastPickerResult: FlutterResult?
 
   override func scene(
     _ scene: UIScene,
@@ -356,13 +357,64 @@ class SceneDelegate: FlutterSceneDelegate {
     return
     #endif
 
+    let preferredExtension = Bundle.main.object(
+      forInfoDictionaryKey: replayKitExtensionBundleIdKey
+    ) as? String
+
+    RPBroadcastActivityViewController.load(withPreferredExtension: preferredExtension) {
+      [weak self] activityViewController, error in
+      DispatchQueue.main.async {
+        guard let self else { return }
+
+        if let activityViewController {
+          guard let presenter = self.topViewController() else {
+            result(
+              FlutterError(
+                code: "NO_VIEW_CONTROLLER",
+                message: "No active view controller found for ReplayKit picker.",
+                details: nil
+              )
+            )
+            return
+          }
+
+          activityViewController.delegate = self
+          self.pendingBroadcastPickerResult = result
+          presenter.present(activityViewController, animated: true)
+          self.setBroadcastStatus("requested")
+          return
+        }
+
+        if let error {
+          self.presentLegacyBroadcastPicker(
+            preferredExtension: preferredExtension,
+            result: result,
+            fallbackReason: error.localizedDescription
+          )
+          return
+        }
+
+        self.presentLegacyBroadcastPicker(
+          preferredExtension: preferredExtension,
+          result: result,
+          fallbackReason: "Broadcast activity controller unavailable."
+        )
+      }
+    }
+  }
+
+  private func presentLegacyBroadcastPicker(
+    preferredExtension: String?,
+    result: @escaping FlutterResult,
+    fallbackReason: String
+  ) {
     DispatchQueue.main.async {
       guard let window = self.window else {
         result(
           FlutterError(
             code: "NO_ACTIVE_WINDOW",
             message: "No active window found for ReplayKit picker.",
-            details: nil
+            details: fallbackReason
           )
         )
         return
@@ -370,9 +422,7 @@ class SceneDelegate: FlutterSceneDelegate {
 
       let picker = RPSystemBroadcastPickerView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
       picker.showsMicrophoneButton = true
-      picker.preferredExtension = Bundle.main.object(
-        forInfoDictionaryKey: self.replayKitExtensionBundleIdKey
-      ) as? String
+      picker.preferredExtension = preferredExtension
       picker.alpha = 0.01
       window.addSubview(picker)
       picker.layoutIfNeeded()
@@ -387,7 +437,7 @@ class SceneDelegate: FlutterSceneDelegate {
           FlutterError(
             code: "PICKER_BUTTON_NOT_FOUND",
             message: "Could not open the iOS broadcast picker UI.",
-            details: nil
+            details: fallbackReason
           )
         )
       }
@@ -395,6 +445,24 @@ class SceneDelegate: FlutterSceneDelegate {
       DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
         picker.removeFromSuperview()
       }
+    }
+  }
+
+  private func topViewController() -> UIViewController? {
+    guard var controller = window?.rootViewController else { return nil }
+    while let presented = controller.presentedViewController {
+      controller = presented
+    }
+    return controller
+  }
+
+  private func completeBroadcastPickerPresentation(success: Bool, error: FlutterError? = nil) {
+    guard let pendingResult = pendingBroadcastPickerResult else { return }
+    pendingBroadcastPickerResult = nil
+    if let error {
+      pendingResult(error)
+    } else {
+      pendingResult(success)
     }
   }
 
@@ -494,6 +562,34 @@ class SceneDelegate: FlutterSceneDelegate {
       _ = BroadcastAudioDebugReader.reportDictionary(revalidateMp4AtPath: fileURL.path)
       self.isImportingBroadcastVideo = false
       completion?(true)
+    }
+  }
+}
+
+@available(iOS 12.0, *)
+extension SceneDelegate: RPBroadcastActivityViewControllerDelegate {
+  func broadcastActivityViewController(
+    _ broadcastActivityViewController: RPBroadcastActivityViewController,
+    didFinishWith broadcastController: RPBroadcastController?,
+    error: Error?
+  ) {
+    broadcastActivityViewController.dismiss(animated: true) { [weak self] in
+      guard let self else { return }
+      if broadcastController != nil {
+        self.setBroadcastStatus("recording")
+        self.completeBroadcastPickerPresentation(success: true)
+      } else if let error {
+        self.completeBroadcastPickerPresentation(
+          success: false,
+          error: FlutterError(
+            code: "BROADCAST_CANCELLED",
+            message: error.localizedDescription,
+            details: nil
+          )
+        )
+      } else {
+        self.completeBroadcastPickerPresentation(success: true)
+      }
     }
   }
 }

@@ -625,7 +625,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastUploadExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BroadcastUploadExtension;
+				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -666,7 +666,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastUploadExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BroadcastUploadExtension;
+				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -704,7 +704,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastUploadExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BroadcastUploadExtension;
+				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -742,7 +742,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastUploadExtensionSetupUI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BroadcastUploadExtensionSetupUI;
+				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -783,7 +783,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastUploadExtensionSetupUI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BroadcastUploadExtensionSetupUI;
+				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -821,7 +821,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastUploadExtensionSetupUI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BroadcastUploadExtensionSetupUI;
+				INFOPLIST_KEY_CFBundleDisplayName = XRecorder;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
