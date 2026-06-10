@@ -24,22 +24,14 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>photos-redirect</string>
-	</array>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>XRecorder can include microphone audio while recording.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>XRecorder saves your screen recordings to the Photos library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>XRecorder needs access to your Photos to list and manage recordings.</string>
-	<key>ReplayKitBroadcastExtensionBundleId</key>
-	<string>com.xrecorder.screenVideo.BroadcastExtension</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>XRecorder saves your screen recordings to the Photos library.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>XRecorder can include microphone audio while recording.</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
@@ -47,6 +39,14 @@
 			<string>cstr6suwn9.skadnetwork</string>
 		</dict>
 	</array>
+	<key>ReplayKitBroadcastExtensionBundleId</key>
+	<string>com.xrecorder.screenVideo.BroadcastExtension</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>photos-redirect</string>
+	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -23,4 +23,4 @@ The extension target must be added in Xcode (project settings) because `Runner.x
 The Flutter app already exposes an **iOS Broadcast Picker (ReplayKit)** button on Record screen via native channel (`xrecorder/replaykit`).
 
 The app now reads `ReplayKitBroadcastExtensionBundleId` from `Runner/Info.plist` and sets `RPSystemBroadcastPickerView.preferredExtension` automatically.
-Default value is already configured as `com.xrecorder.screenVideo.BroadcastExtension`.
+Default value is already configured as `com.xrecorder.screenVideo.BroadcastExtension` in `Runner/Info.plist` (`ReplayKitBroadcastExtensionBundleId`).
