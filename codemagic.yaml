@@ -22,6 +22,9 @@ workflows:
       - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
 
+      - name: Fix extension entitlements paths after use-profiles
+        script: bash ios/scripts/fix_extension_signing_paths.sh ios/Runner.xcodeproj/project.pbxproj
+
       - name: Build IPA
         script: flutter build ipa --release --export-options-plist=/Users/builder/export_options.plist
 

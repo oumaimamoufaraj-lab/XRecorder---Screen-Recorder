@@ -8,7 +8,7 @@ The extension target must be added in Xcode (project settings) because `Runner.x
 ## Steps (Xcode)
 1. Open `ios/Runner.xcworkspace` in Xcode.
 2. `File` -> `New` -> `Target...` -> choose **Broadcast Upload Extension**.
-3. Name: `com.xrecorder.screenVideo.BroadcastExtension`.
+3. Name: `BroadcastUploadExtension`.
 4. When prompted, **Activate** the new scheme.
 5. Replace generated `SampleHandler.swift` and `Info.plist` with files from this folder.
 6. Set extension bundle id to: `com.xrecorder.screenVideo.BroadcastExtension`.
