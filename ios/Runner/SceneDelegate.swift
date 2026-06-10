@@ -357,10 +357,20 @@ class SceneDelegate: FlutterSceneDelegate {
     return
     #endif
 
-    let preferredExtension = Bundle.main.object(
-      forInfoDictionaryKey: replayKitExtensionBundleIdKey
-    ) as? String
+    let preferredExtension = resolvedBroadcastExtensionBundleId()
+    presentBroadcastActivityPicker(
+      preferredExtension: preferredExtension,
+      result: result,
+      allowPreferredFallback: true
+    )
+  }
 
+  @available(iOS 12.0, *)
+  private func presentBroadcastActivityPicker(
+    preferredExtension: String?,
+    result: @escaping FlutterResult,
+    allowPreferredFallback: Bool
+  ) {
     RPBroadcastActivityViewController.load(withPreferredExtension: preferredExtension) {
       [weak self] activityViewController, error in
       DispatchQueue.main.async {
@@ -385,22 +395,66 @@ class SceneDelegate: FlutterSceneDelegate {
           return
         }
 
-        if let error {
-          self.presentLegacyBroadcastPicker(
-            preferredExtension: preferredExtension,
+        if allowPreferredFallback, preferredExtension != nil {
+          let embeddedId = self.embeddedBroadcastUploadExtensionBundleId()
+          if embeddedId != preferredExtension {
+            self.presentBroadcastActivityPicker(
+              preferredExtension: embeddedId,
+              result: result,
+              allowPreferredFallback: false
+            )
+            return
+          }
+
+          self.presentBroadcastActivityPicker(
+            preferredExtension: nil,
             result: result,
-            fallbackReason: error.localizedDescription
+            allowPreferredFallback: false
           )
           return
         }
 
+        let fallbackReason = error?.localizedDescription
+          ?? "Broadcast activity controller unavailable."
         self.presentLegacyBroadcastPicker(
-          preferredExtension: preferredExtension,
+          preferredExtension: self.embeddedBroadcastUploadExtensionBundleId(),
           result: result,
-          fallbackReason: "Broadcast activity controller unavailable."
+          fallbackReason: fallbackReason
         )
       }
     }
+  }
+
+  private func resolvedBroadcastExtensionBundleId() -> String? {
+    if let embeddedId = embeddedBroadcastUploadExtensionBundleId() {
+      return embeddedId
+    }
+
+    return Bundle.main.object(
+      forInfoDictionaryKey: replayKitExtensionBundleIdKey
+    ) as? String
+  }
+
+  private func embeddedBroadcastUploadExtensionBundleId() -> String? {
+    guard let pluginsURL = Bundle.main.builtInPlugInsURL,
+          let pluginURLs = try? FileManager.default.contentsOfDirectory(
+            at: pluginsURL,
+            includingPropertiesForKeys: nil
+          ) else {
+      return nil
+    }
+
+    for pluginURL in pluginURLs where pluginURL.pathExtension == "appex" {
+      guard let pluginBundle = Bundle(url: pluginURL),
+            let extensionInfo = pluginBundle.infoDictionary?["NSExtension"] as? [String: Any],
+            let extensionPoint = extensionInfo["NSExtensionPointIdentifier"] as? String,
+            extensionPoint == "com.apple.broadcast-services-upload" else {
+        continue
+      }
+      return pluginBundle.bundleIdentifier
+    }
+
+    return nil
   }
 
   private func presentLegacyBroadcastPicker(

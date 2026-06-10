@@ -40,7 +40,7 @@
 		</dict>
 	</array>
 	<key>ReplayKitBroadcastExtensionBundleId</key>
-	<string>com.xrecorder.screenVideo.BroadcastExtension</string>
+	<string>com.xrecorder.screenVideo.BroadcastUploadExtension</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>photos-redirect</string>
