@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Codemagic `xcode-project use-profiles` rewrites extension paths to bundle-id
-# folder names that do not exist, and may reset signing to Automatic.
+# folder names that do not exist. Restore real source/entitlements paths only.
 set -euo pipefail
 
 PBXPROJ="${1:-ios/Runner.xcodeproj/project.pbxproj}"
@@ -12,7 +12,6 @@ fi
 
 python3 - "$PBXPROJ" <<'PY'
 from pathlib import Path
-import re
 import sys
 
 path = Path(sys.argv[1])
@@ -164,71 +163,8 @@ replacements = [
 for old, new in replacements:
     text = text.replace(old, new)
 
-team_match = re.search(r"DEVELOPMENT_TEAM = ([A-Z0-9]+);", text)
-development_team = team_match.group(1) if team_match else "49B45VHG69"
-
-SIGNING_BY_BUNDLE = {
-    "com.xrecorder.screenVideo": {
-        "PROVISIONING_PROFILE_SPECIFIER": "provisioning_xrecorder",
-    },
-    "com.xrecorder.screenVideo.BroadcastExtension": {
-        "PROVISIONING_PROFILE_SPECIFIER": "xrecorder_broadcast_extension",
-    },
-    "com.xrecorder.screenVideo.BroadcastUploadExtensionSetupUI": {
-        "PROVISIONING_PROFILE_SPECIFIER": "xrecorder_broadcast_setup_ui",
-    },
-}
-
-SIGNING_KEYS = {
-    "CODE_SIGN_STYLE": "Manual",
-    "DEVELOPMENT_TEAM": development_team,
-    "CODE_SIGN_IDENTITY": '"Apple Distribution"',
-    "CODE_SIGN_IDENTITY[sdk=iphoneos*]": '"Apple Distribution"',
-}
-
-
-def upsert_setting(block: str, key: str, value: str) -> str:
-    pattern = re.compile(rf"^\t\t\t\t{re.escape(key)} = .*?;\n", re.MULTILINE)
-    line = f"\t\t\t\t{key} = {value};\n"
-    if pattern.search(block):
-        return pattern.sub(line, block, count=1)
-    return block.replace("\t\t\tbuildSettings = {\n", f"\t\t\tbuildSettings = {{\n{line}", 1)
-
-
-def patch_release_profile_signing(source: str) -> str:
-    blocks = re.split(r"(?=\n\t\t[A-F0-9]+ /\* (?:Release|Profile) \*/ = \{)", source)
-    patched = [blocks[0]]
-    for block in blocks[1:]:
-        if "name = Release;" not in block and "name = Profile;" not in block:
-            patched.append(block)
-            continue
-        bundle_match = re.search(
-            r"PRODUCT_BUNDLE_IDENTIFIER = (com\.xrecorder\.screenVideo(?:\.[A-Za-z]+)?);",
-            block,
-        )
-        if not bundle_match:
-            patched.append(block)
-            continue
-        bundle_id = bundle_match.group(1)
-        signing = SIGNING_BY_BUNDLE.get(bundle_id)
-        if not signing:
-            patched.append(block)
-            continue
-        for key, value in SIGNING_KEYS.items():
-            block = upsert_setting(block, key, value)
-        for key, value in signing.items():
-            block = upsert_setting(
-                block,
-                key,
-                f'"{value}"' if key == "PROVISIONING_PROFILE_SPECIFIER" else value,
-            )
-        patched.append(block)
-    return "".join(patched)
-
-
-text = patch_release_profile_signing(text)
 path.write_text(text)
-print(f"Patched extension paths and Release/Profile signing in {path}")
+print(f"Patched extension paths in {path}")
 PY
 
 INFO_PLIST="ios/Runner/Info.plist"
