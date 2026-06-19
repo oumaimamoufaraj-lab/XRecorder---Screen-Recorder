@@ -62,7 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: const Text('Privacy Policy'),
         content: const SingleChildScrollView(
           child: Text(
-            'XRecorder saves screen recordings to your device Photos library. '
+            'NowRecorder saves screen recordings to your device Photos library. '
             'Recordings stay on your device unless you choose to share them.\n\n'
             'The app requests Photos access to save and list your recordings, and '
             'microphone access when you turn the microphone on during a broadcast.\n\n'
@@ -95,7 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           icon: Icons.star_outline_rounded,
           iconColor: const Color(0xFFFFB300),
           title: 'Rate App',
-          subtitle: 'Enjoying XRecorder? Leave a review',
+          subtitle: 'Enjoying NowRecorder? Leave a review',
           onTap: () => _openUrl(AppConfig.appStoreReviewUrl!),
         ),
       _SettingsTile(

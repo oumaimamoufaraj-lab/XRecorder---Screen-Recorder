@@ -20,7 +20,7 @@ class OnboardingPageData {
 
 const onboardingPages = [
   OnboardingPageData(
-    title: 'Welcome to XRecorder',
+    title: 'Welcome to NowRecorder',
     description:
         'Record your screen with one tap, then manage clips in your Videos library.',
     features: [

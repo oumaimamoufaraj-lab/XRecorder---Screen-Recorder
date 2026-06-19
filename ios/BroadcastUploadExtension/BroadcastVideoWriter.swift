@@ -51,7 +51,7 @@ final class BroadcastVideoWriter {
       completion(
         .failure(
           NSError(
-            domain: "XRecorder",
+            domain: "NowRecorder",
             code: 4,
             userInfo: [NSLocalizedDescriptionKey: "No video was written (writer not configured)."]
           )
@@ -70,7 +70,7 @@ final class BroadcastVideoWriter {
         completion(
           .failure(
             NSError(
-              domain: "XRecorder",
+              domain: "NowRecorder",
               code: 5,
               userInfo: [NSLocalizedDescriptionKey: "No video frames were captured."]
             )
@@ -97,7 +97,7 @@ final class BroadcastVideoWriter {
         completion(
           .failure(
             writer.error ?? NSError(
-              domain: "XRecorder",
+              domain: "NowRecorder",
               code: 6,
               userInfo: [NSLocalizedDescriptionKey: "Failed to finalize MP4 file."]
             )
@@ -142,14 +142,14 @@ final class BroadcastVideoWriter {
   private func configureVideo(with sampleBuffer: CMSampleBuffer) throws {
     guard let outputURL else {
       throw NSError(
-        domain: "XRecorder",
+        domain: "NowRecorder",
         code: 1,
         userInfo: [NSLocalizedDescriptionKey: "Output URL was not prepared."]
       )
     }
     guard let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) else {
       throw NSError(
-        domain: "XRecorder",
+        domain: "NowRecorder",
         code: 2,
         userInfo: [NSLocalizedDescriptionKey: "Missing video format description."]
       )
@@ -177,7 +177,7 @@ final class BroadcastVideoWriter {
 
     guard writer.canAdd(videoIn) else {
       throw writer.error ?? NSError(
-        domain: "XRecorder",
+        domain: "NowRecorder",
         code: 3,
         userInfo: [NSLocalizedDescriptionKey: "Cannot add video input to writer."]
       )

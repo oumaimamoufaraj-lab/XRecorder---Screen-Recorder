@@ -302,7 +302,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
           'iOS will ask you to confirm screen broadcast.\n\n'
           '1. Tap Continue to open Apple’s broadcast menu.\n'
           '2. Turn Microphone ON (required for audio).\n'
-          '3. Select XRecorder in the list.\n'
+          '3. Select NowRecorder in the list.\n'
           '4. Tap Start Broadcast.\n'
           '5. Stop from the red status bar or Control Center.',
         ),
@@ -814,7 +814,7 @@ class _BroadcastStatusChipState extends State<_BroadcastStatusChip>
       dotColor = Colors.orange;
     } else if (widget.isRecording || widget.statusText == 'Recording...') {
       dotColor = Colors.green;
-    } else if (widget.statusText == 'Select XRecorder in Broadcast Picker') {
+    } else if (widget.statusText == 'Select NowRecorder in Broadcast Picker') {
       dotColor = AppColors.primaryOrange;
     }
 

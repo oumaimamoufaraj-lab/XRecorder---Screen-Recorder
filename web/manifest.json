@@ -1,6 +1,6 @@
 {
-    "name": "fc_app3_xrecorder",
-    "short_name": "fc_app3_xrecorder",
+    "name": "NowRecorder - Screen Recorder",
+    "short_name": "NowRecorder",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

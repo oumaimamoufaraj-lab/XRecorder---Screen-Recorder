@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>XRecorder - Screen Recorder</string>
+	<string>NowRecorder - Screen Recorder</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -25,11 +25,11 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>XRecorder needs access to your Photos to list and manage recordings.</string>
+	<string>NowRecorder needs access to your Photos to list and manage recordings.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>XRecorder saves your screen recordings to the Photos library.</string>
+	<string>NowRecorder saves your screen recordings to the Photos library.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>XRecorder can include microphone audio while recording.</string>
+	<string>NowRecorder can include microphone audio while recording.</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>SKAdNetworkItems</key>

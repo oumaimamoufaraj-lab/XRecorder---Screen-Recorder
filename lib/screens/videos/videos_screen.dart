@@ -177,7 +177,7 @@ class VideosScreenState extends State<VideosScreen> {
       return;
     }
     await SharePlus.instance.share(
-      ShareParams(files: [XFile(file.path)], text: 'XRecorder video'),
+      ShareParams(files: [XFile(file.path)], text: 'NowRecorder video'),
     );
   }
 

@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../onboarding/onboarding_screen.dart';
 import '../home/main_shell.dart';
 import '../../services/ads_bootstrap_service.dart';
-import '../../theme/app_colors.dart';
 import '../../widgets/brand_logo.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -51,32 +50,40 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.splashOrange,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const BrandLogo(size: 116, radius: 30),
-            const SizedBox(height: 28),
-            const Text(
-              'XRecorder',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                letterSpacing: -0.5,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF0D9488), Color(0xFF6366F1)],
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const BrandLogo(size: 116, radius: 30),
+              const SizedBox(height: 28),
+              const Text(
+                'NowRecorder',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: -0.5,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Screen Recorder',
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.9),
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
+              const SizedBox(height: 8),
+              Text(
+                'Screen Recorder',
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

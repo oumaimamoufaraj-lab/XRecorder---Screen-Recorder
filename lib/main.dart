@@ -15,17 +15,17 @@ Future<void> main() async {
   await themeController.load();
   await AdsBootstrapService.prefetchConfig();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(const AzRecorderApp());
+  runApp(const NowRecorderApp());
 }
 
-class AzRecorderApp extends StatefulWidget {
-  const AzRecorderApp({super.key});
+class NowRecorderApp extends StatefulWidget {
+  const NowRecorderApp({super.key});
 
   @override
-  State<AzRecorderApp> createState() => _AzRecorderAppState();
+  State<NowRecorderApp> createState() => _NowRecorderAppState();
 }
 
-class _AzRecorderAppState extends State<AzRecorderApp> with WidgetsBindingObserver {
+class _NowRecorderAppState extends State<NowRecorderApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();

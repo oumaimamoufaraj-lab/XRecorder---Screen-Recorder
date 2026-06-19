@@ -1,7 +1,7 @@
 /// App-wide identity, links, and store metadata.
 abstract final class AppConfig {
-  static const String appDisplayName = 'XRecorder - Screen Recorder';
-  static const String appName = 'XRecorder';
+  static const String appDisplayName = 'NowRecorder - Screen Recorder';
+  static const String appName = 'NowRecorder';
   static const String packageName = 'com.xrecorder.screenVideo';
 
   static const String privacyPolicyUrl =
@@ -20,7 +20,7 @@ abstract final class AppConfig {
       ? 'https://apps.apple.com/app/id$appStoreId?action=write-review'
       : null;
 
-  static const String appVersion = '1.0.0';
+  static const String appVersion = '1.0.5';
 
   /// AdMob application ID (must match Info.plist / AndroidManifest).
   /// Replace with your production ID from the AdMob console.

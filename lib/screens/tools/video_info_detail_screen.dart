@@ -75,7 +75,7 @@ class _VideoInfoDetailScreenState extends State<VideoInfoDetailScreen> {
       return;
     }
     await SharePlus.instance.share(
-      ShareParams(files: [XFile(file.path)], text: 'XRecorder video'),
+      ShareParams(files: [XFile(file.path)], text: 'NowRecorder video'),
     );
   }
 
