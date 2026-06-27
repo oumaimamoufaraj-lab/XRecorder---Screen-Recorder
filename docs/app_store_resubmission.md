@@ -124,7 +124,7 @@ Declare as applicable:
 - [ ] Clean install: confirm **no Photos prompt on Home launch**  
 - [ ] Run `flutter build ipa` / Codemagic after `pod install` (ad SDKs removed)  
 - [ ] Update Google Sites privacy/support pages to say **NowRecorder · Privacy Recorder** (URLs can stay; page titles should match)  
-- [ ] Increment build number in `pubspec.yaml` for each upload  
+- [ ] Increment build number in `pubspec.yaml` for each upload (current: **1.1.0+5**)
 
 ---
 
