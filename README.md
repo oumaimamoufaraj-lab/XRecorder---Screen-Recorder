@@ -1,17 +1,28 @@
-# fc_app3_xrecorder
+# NowRecorder · Privacy Recorder
 
-A new Flutter project.
+Privacy-first screen recorder for iOS and Android.
 
-## Getting Started
+Record your screen on-device with no account required. Before sharing, use **Shield Studio** to scan for sensitive text, add blur regions, and export a safe copy — all processing stays on your device.
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+- **Capture** — ReplayKit full-device recording with optional microphone audio
+- **Clips** — grid library with search, sort, and privacy status badges
+- **Shield Studio** — on-device OCR scan (emails/phones), Privacy Score, manual blur regions
+- **Safe Export** — redacted video export to Photos via on-device FFmpeg
+- **Safe Share** — confirmation with privacy status before sharing
+- **Video Info** — inspect resolution, duration, and format
+- No ads · No cloud upload · Photos access only when you open Clips or record
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## App Store resubmission
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+See [docs/app_store_resubmission.md](docs/app_store_resubmission.md) for review notes, description copy, and screenshot guidance (Guideline 4.3(a)).
+
+## Development
+
+```bash
+flutter pub get
+flutter run
+```
+
+iOS full-device recording requires a physical iPhone (not Simulator).

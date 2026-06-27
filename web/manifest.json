@@ -1,11 +1,11 @@
 {
-    "name": "NowRecorder - Screen Recorder",
+    "name": "NowRecorder · Privacy Recorder",
     "short_name": "NowRecorder",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Record your screen, scan for sensitive info, blur and export safely — all on-device.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

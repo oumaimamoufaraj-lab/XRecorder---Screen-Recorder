@@ -6,6 +6,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../models/video_info_details.dart';
 import '../../services/photos_launcher_service.dart';
+import '../../services/privacy_share_guard.dart';
 import '../../services/video_info_service.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/context_extensions.dart';
@@ -68,6 +69,9 @@ class _VideoInfoDetailScreenState extends State<VideoInfoDetailScreen> {
   }
 
   Future<void> _share() async {
+    if (!await PrivacyShareGuard.confirmBeforeShare(context, video: widget.video)) {
+      return;
+    }
     final file = await widget.video.file;
     if (!mounted) return;
     if (file == null) {

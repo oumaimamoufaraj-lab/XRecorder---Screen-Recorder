@@ -4,11 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../services/ad_action_service.dart';
+import '../../models/privacy_video_state.dart';
 import '../../services/photos_launcher_service.dart';
+import '../../services/privacy_share_guard.dart';
+import '../../services/privacy_storage_service.dart';
 import '../../services/video_library_service.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_design.dart';
 import '../../theme/context_extensions.dart';
+import '../../widgets/privacy_status_badge.dart';
+import '../../widgets/vault_screen_header.dart';
+import '../privacy/privacy_studio_screen.dart';
 import 'video_player_screen.dart';
 
 class VideosScreen extends StatefulWidget {
@@ -21,28 +27,33 @@ class VideosScreen extends StatefulWidget {
 class VideosScreenState extends State<VideosScreen> {
   final VideoLibraryService _library = VideoLibraryService();
   final PhotosLauncherService _photosLauncher = PhotosLauncherService();
-  bool _loading = true;
+  final PrivacyStorageService _privacyStorage = PrivacyStorageService.instance;
+  bool _loading = false;
+  bool _neverLoaded = true;
   bool _permissionDenied = false;
   List<AssetEntity> _videos = const [];
   List<AssetEntity> _allVideos = const [];
+  Map<String, PrivacyVideoState> _privacyStates = {};
   String _searchQuery = '';
   VideoSortMode _sortMode = VideoSortMode.newest;
 
   @override
   void initState() {
     super.initState();
-    _loadVideos();
   }
 
-  void reloadVideos() {
-    _loadVideos();
+  Future<void> reloadVideos({bool requestPermission = false}) {
+    _neverLoaded = false;
+    return _loadVideos(requestPermission: requestPermission);
   }
 
-  Future<void> _loadVideos() async {
+  Future<void> _loadVideos({bool requestPermission = false}) async {
     setState(() => _loading = true);
 
     try {
-      final hasPermission = await _library.hasPermission();
+      final hasPermission = requestPermission
+          ? await _library.requestPermission()
+          : await _library.hasPermission();
       if (!hasPermission) {
         if (!mounted) return;
         setState(() {
@@ -56,10 +67,13 @@ class VideosScreenState extends State<VideosScreen> {
 
       final entities = await _library.loadVideos();
       if (!mounted) return;
+      final states = await _privacyStorage.loadMany(entities.map((e) => e.id));
+      if (!mounted) return;
       setState(() {
         _permissionDenied = false;
         _allVideos = entities;
         _videos = _applyFilters(entities);
+        _privacyStates = states;
         _loading = false;
       });
     } catch (_) {
@@ -158,6 +172,15 @@ class VideosScreenState extends State<VideosScreen> {
     _applyLocalFilters();
   }
 
+  Future<void> _openPrivacyStudio(AssetEntity video) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => PrivacyStudioScreen(video: video),
+      ),
+    );
+    await _loadVideos();
+  }
+
   Future<void> _openVideo(AssetEntity video) async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -168,6 +191,9 @@ class VideosScreenState extends State<VideosScreen> {
   }
 
   Future<void> _shareVideo(AssetEntity video) async {
+    if (!await PrivacyShareGuard.confirmBeforeShare(context, video: video)) {
+      return;
+    }
     final file = await video.file;
     if (!mounted) return;
     if (file == null) {
@@ -221,10 +247,8 @@ class VideosScreenState extends State<VideosScreen> {
   }
 
   Future<void> _deleteVideoWithConfirmation(AssetEntity video) async {
-    await AdActionService.runWithInterstitialAsync(() async {
-      if (!await _confirmDelete(video) || !mounted) return;
-      await _deleteVideo(video);
-    });
+    if (!await _confirmDelete(video) || !mounted) return;
+    await _deleteVideo(video);
   }
 
   Future<void> _openInPhotos(AssetEntity video) async {
@@ -243,36 +267,6 @@ class VideosScreenState extends State<VideosScreen> {
     }
   }
 
-  void _showVideoOverflow(AssetEntity video) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.photo_library_outlined),
-              title: const Text('Open in Photos'),
-              subtitle: const Text('View in the system Photos app'),
-              onTap: () {
-                Navigator.pop(context);
-                _openInPhotos(video);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete_outline, color: Colors.red),
-              title: const Text('Delete', style: TextStyle(color: Colors.red)),
-              onTap: () {
-                Navigator.pop(context);
-                _deleteVideoWithConfirmation(video);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   String _formatDuration(int seconds) {
     final d = Duration(seconds: seconds);
     String twoDigits(int n) => n.toString().padLeft(2, '0');
@@ -282,174 +276,243 @@ class VideosScreenState extends State<VideosScreen> {
     return '${d.inMinutes}:${twoDigits(d.inSeconds.remainder(60))}';
   }
 
-  String _formatDate(DateTime date) {
-    final local = date.toLocal();
-    return '${local.month}/${local.day}/${local.year}';
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return Column(
+      children: [
+        VaultScreenHeader(
+          title: 'Clips',
+          subtitle: _videos.isEmpty
+              ? 'Your recordings appear here'
+              : '${_videos.length} clip${_videos.length == 1 ? '' : 's'}',
+          trailing: [
+            VaultIconAction(
+              icon: Icons.search,
+              tooltip: 'Search',
+              onPressed: _openSearch,
+            ),
+            const SizedBox(width: 6),
+            VaultIconAction(
+              icon: Icons.sort,
+              tooltip: 'Sort',
+              onPressed: _openSort,
+            ),
+            const SizedBox(width: 6),
+            VaultIconAction(
+              icon: Icons.refresh,
+              tooltip: 'Refresh',
+              onPressed: () => reloadVideos(requestPermission: true),
+            ),
+          ],
+        ),
+        if (_searchQuery.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: InputChip(
+                label: Text('Search: $_searchQuery'),
+                deleteIcon: const Icon(Icons.close, size: 16),
+                onDeleted: () {
+                  _searchQuery = '';
+                  _applyLocalFilters();
+                },
+              ),
+            ),
+          ),
+        Expanded(
+          child: _neverLoaded
+              ? const _ClipsIdleView()
+              : _loading
+              ? const _VideosLoadingView()
+              : _permissionDenied
+              ? _PermissionDeniedView(onOpenSettings: PhotoManager.openSetting)
+              : _videos.isEmpty
+              ? _EmptyView(
+                  onRefresh: () => _loadVideos(requestPermission: true),
+                  hasSearchQuery: _searchQuery.isNotEmpty,
+                  totalInLibrary: _allVideos.length,
+                )
+              : RefreshIndicator(
+                  onRefresh: () => _loadVideos(requestPermission: true),
+                  color: palette.accent,
+                  child: GridView.builder(
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: 0.72,
+                    ),
+                    itemCount: _videos.length,
+                    itemBuilder: (context, index) {
+                      final video = _videos[index];
+                      final state = _privacyStates[video.id] ??
+                          PrivacyVideoState.unreviewed(video.id);
+                      return _ClipGridTile(
+                        video: video,
+                        durationText: _formatDuration(video.duration),
+                        privacyState: state,
+                        onTap: () => _showClipActions(video, state),
+                      );
+                    },
+                  ),
+                ),
+        ),
+      ],
+    );
   }
+
+  void _showClipActions(AssetEntity video, PrivacyVideoState state) {
+    final palette = context.palette;
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.play_circle_outline),
+                title: Text(video.title ?? 'Recording'),
+                subtitle: PrivacyStatusBadge(state: state),
+              ),
+              ListTile(
+                leading: Icon(Icons.shield_outlined, color: palette.accent),
+                title: const Text('Open Shield Studio'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _openPrivacyStudio(video);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.play_arrow),
+                title: const Text('Play'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _openVideo(video);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.ios_share),
+                title: const Text('Safe Share'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _shareVideo(video);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library_outlined),
+                title: const Text('Open in Photos'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _openInPhotos(video);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.delete_outline, color: Colors.red.shade700),
+                title: Text('Delete', style: TextStyle(color: Colors.red.shade700)),
+                onTap: () {
+                  Navigator.pop(context);
+                  _deleteVideoWithConfirmation(video);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ClipGridTile extends StatelessWidget {
+  const _ClipGridTile({
+    required this.video,
+    required this.durationText,
+    required this.privacyState,
+    required this.onTap,
+  });
+
+  final AssetEntity video;
+  final String durationText;
+  final PrivacyVideoState privacyState;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+    return Material(
+      color: palette.card,
+      borderRadius: BorderRadius.circular(AppDesign.radiusMd),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Screen Recordings',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: palette.textPrimary,
-                        ),
-                      ),
-                      if (_videos.isNotEmpty)
-                        Text(
-                          '${_videos.length} video${_videos.length == 1 ? '' : 's'}',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: palette.textSecondary,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  onPressed: _openSearch,
-                  icon: const Icon(Icons.search),
-                  color: palette.textPrimary,
-                  tooltip: 'Search',
-                ),
-                IconButton(
-                  onPressed: _openSort,
-                  icon: const Icon(Icons.sort),
-                  color: palette.textPrimary,
-                  tooltip: 'Sort',
-                ),
-                IconButton(
-                  onPressed: () =>
-                      AdActionService.runWithInterstitial(_loadVideos),
-                  icon: const Icon(Icons.refresh),
-                  color: palette.textPrimary,
-                  tooltip: 'Refresh',
-                ),
-              ],
-            ),
-            if (_searchQuery.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: InputChip(
-                  label: Text('Search: $_searchQuery'),
-                  deleteIcon: const Icon(Icons.close, size: 16),
-                  onDeleted: () {
-                    _searchQuery = '';
-                    _applyLocalFilters();
-                  },
-                ),
-              ),
-            ],
             Expanded(
-              child: _loading
-                  ? const _VideosLoadingView()
-                  : _permissionDenied
-                  ? _PermissionDeniedView(onOpenSettings: PhotoManager.openSetting)
-                  : _videos.isEmpty
-                  ? _EmptyView(
-                      onRefresh: () => AdActionService.runWithInterstitialAsync(
-                        _loadVideos,
-                      ),
-                      hasSearchQuery: _searchQuery.isNotEmpty,
-                      totalInLibrary: _allVideos.length,
-                    )
-                  : RefreshIndicator(
-                      onRefresh: () => AdActionService.runWithInterstitialAsync(
-                        _loadVideos,
-                      ),
-                      child: ListView.separated(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        padding: const EdgeInsets.only(top: 12, bottom: 24),
-                        itemCount: _videos.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 10),
-                        itemBuilder: (context, index) {
-                          final video = _videos[index];
-                          final durationText = _formatDuration(video.duration);
-                          final dateText = _formatDate(video.createDateTime);
-                          return Dismissible(
-                            key: ValueKey(video.id),
-                            direction: DismissDirection.endToStart,
-                            background: Container(
-                              alignment: Alignment.centerRight,
-                              padding: const EdgeInsets.only(right: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.red.shade600,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: const Icon(
-                                Icons.delete_outline,
-                                color: Colors.white,
-                                size: 28,
-                              ),
-                            ),
-                            confirmDismiss: (_) {
-                              return AdActionService.runWithInterstitialAsync(
-                                () async {
-                                  final messenger =
-                                      ScaffoldMessenger.of(context);
-                                  if (!await _confirmDelete(video)) {
-                                    return false;
-                                  }
-                                  if (!mounted) return false;
-                                  final deleted =
-                                      await _library.deleteVideo(video);
-                                  if (!mounted) return false;
-                                  if (deleted) {
-                                    _removeVideoLocally(video);
-                                    messenger.showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Recording deleted.'),
-                                      ),
-                                    );
-                                    return true;
-                                  }
-                                  messenger.showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'Could not delete recording.',
-                                      ),
-                                    ),
-                                  );
-                                  return false;
-                                },
-                              );
-                            },
-                            child: _VideoListTile(
-                              video: video,
-                              durationText: durationText,
-                              dateText: dateText,
-                              onPlay: () => _openVideo(video),
-                              onShare: () => AdActionService.runWithInterstitial(
-                                () => _shareVideo(video),
-                              ),
-                              onDelete: () =>
-                                  _deleteVideoWithConfirmation(video),
-                              onMore: () => _showVideoOverflow(video),
-                            ),
-                          );
-                        },
-                      ),
+              child: _VideoThumbnail(
+                video: video,
+                durationText: durationText,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    video.title ?? 'Recording',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                      color: palette.textPrimary,
                     ),
+                  ),
+                  const SizedBox(height: 6),
+                  PrivacyStatusBadge(state: privacyState, compact: true),
+                ],
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ClipsIdleView extends StatelessWidget {
+  const _ClipsIdleView();
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.video_library_outlined, size: 64, color: palette.textSecondary),
+          const SizedBox(height: 16),
+          Text(
+            'Your recordings appear here',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: palette.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Record from Capture or pull down to refresh.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: palette.textSecondary),
+          ),
+        ],
       ),
     );
   }
@@ -669,14 +732,9 @@ class _VideoThumbnailState extends State<_VideoThumbnail> {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: SizedBox(
-        width: 104,
-        height: 58,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
+    return Stack(
+      fit: StackFit.expand,
+      children: [
             if (_loading)
               ColoredBox(
                 color: palette.peachLight,
@@ -737,162 +795,6 @@ class _VideoThumbnailState extends State<_VideoThumbnail> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _VideoListTile extends StatelessWidget {
-  const _VideoListTile({
-    required this.video,
-    required this.durationText,
-    required this.dateText,
-    required this.onPlay,
-    required this.onShare,
-    required this.onDelete,
-    required this.onMore,
-  });
-
-  final AssetEntity video;
-  final String durationText;
-  final String dateText;
-  final VoidCallback onPlay;
-  final VoidCallback onShare;
-  final VoidCallback onDelete;
-  final VoidCallback onMore;
-
-  @override
-  Widget build(BuildContext context) {
-    final palette = context.palette;
-    return Material(
-      color: palette.card,
-      borderRadius: BorderRadius.circular(14),
-      clipBehavior: Clip.antiAlias,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          boxShadow: [
-            BoxShadow(
-              color: palette.cardShadow,
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 4, 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: onPlay,
-                borderRadius: BorderRadius.circular(10),
-                child: _VideoThumbnail(
-                  video: video,
-                  durationText: durationText,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      video.title ?? 'Screen Recording',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                        color: palette.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      dateText,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: palette.textSecondary,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        _VideoActionButton(
-                          icon: Icons.play_circle_outline,
-                          label: 'Play',
-                          color: AppColors.primaryOrange,
-                          onPressed: onPlay,
-                        ),
-                        _VideoActionButton(
-                          icon: Icons.share_outlined,
-                          label: 'Share',
-                          onPressed: onShare,
-                        ),
-                        _VideoActionButton(
-                          icon: Icons.delete_outline,
-                          label: 'Delete',
-                          color: Colors.red.shade700,
-                          onPressed: onDelete,
-                        ),
-                        IconButton(
-                          onPressed: onMore,
-                          icon: const Icon(Icons.more_vert, size: 22),
-                          color: palette.textSecondary,
-                          tooltip: 'More',
-                          visualDensity: VisualDensity.compact,
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(
-                            minWidth: 36,
-                            minHeight: 36,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _VideoActionButton extends StatelessWidget {
-  const _VideoActionButton({
-    required this.icon,
-    required this.label,
-    required this.onPressed,
-    this.color,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onPressed;
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) {
-    final iconColor = color ?? context.palette.textPrimary;
-    return Padding(
-      padding: const EdgeInsets.only(right: 2),
-      child: TextButton.icon(
-        onPressed: onPressed,
-        icon: Icon(icon, size: 18, color: iconColor),
-        label: Text(
-          label,
-          style: TextStyle(fontSize: 12, color: iconColor),
-        ),
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-          minimumSize: Size.zero,
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          visualDensity: VisualDensity.compact,
-        ),
-      ),
     );
   }
 }

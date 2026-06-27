@@ -7,9 +7,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
   const AppPalette({
     required this.background,
     required this.card,
+    required this.elevated,
     required this.textPrimary,
     required this.textSecondary,
     required this.textMuted,
+    required this.accent,
+    required this.accentSoft,
     required this.peachLight,
     required this.orangeTint,
     required this.indicatorInactive,
@@ -22,9 +25,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
 
   final Color background;
   final Color card;
+  final Color elevated;
   final Color textPrimary;
   final Color textSecondary;
   final Color textMuted;
+  final Color accent;
+  final Color accentSoft;
   final Color peachLight;
   final Color orangeTint;
   final Color indicatorInactive;
@@ -35,11 +41,14 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color bottomNavBackground;
 
   static const light = AppPalette(
-    background: AppColors.background,
-    card: AppColors.cardWhite,
+    background: AppColors.vaultBg,
+    card: AppColors.vaultSurface,
+    elevated: AppColors.vaultElevated,
     textPrimary: AppColors.textPrimary,
     textSecondary: AppColors.textSecondary,
     textMuted: AppColors.textMuted,
+    accent: AppColors.primaryOrange,
+    accentSoft: AppColors.peachLight,
     peachLight: AppColors.peachLight,
     orangeTint: AppColors.orangeTint,
     indicatorInactive: AppColors.indicatorInactive,
@@ -51,11 +60,14 @@ class AppPalette extends ThemeExtension<AppPalette> {
   );
 
   static const dark = AppPalette(
-    background: Color(0xFF121212),
-    card: Color(0xFF1E1E1E),
-    textPrimary: Color(0xFFF2F2F7),
-    textSecondary: Color(0xFFAEAEB2),
-    textMuted: Color(0xFF8E8E93),
+    background: AppColors.vaultBgDark,
+    card: AppColors.vaultSurfaceDark,
+    elevated: AppColors.vaultElevatedDark,
+    textPrimary: AppColors.textPrimaryDark,
+    textSecondary: AppColors.textSecondaryDark,
+    textMuted: AppColors.textSecondaryDark,
+    accent: AppColors.primaryOrangeLight,
+    accentSoft: Color(0xFF3A2A24),
     peachLight: Color(0xFF3A2A24),
     orangeTint: Color(0xFF2C221D),
     indicatorInactive: Color(0xFF48484A),
@@ -70,9 +82,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
   AppPalette copyWith({
     Color? background,
     Color? card,
+    Color? elevated,
     Color? textPrimary,
     Color? textSecondary,
     Color? textMuted,
+    Color? accent,
+    Color? accentSoft,
     Color? peachLight,
     Color? orangeTint,
     Color? indicatorInactive,
@@ -85,9 +100,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
     return AppPalette(
       background: background ?? this.background,
       card: card ?? this.card,
+      elevated: elevated ?? this.elevated,
       textPrimary: textPrimary ?? this.textPrimary,
       textSecondary: textSecondary ?? this.textSecondary,
       textMuted: textMuted ?? this.textMuted,
+      accent: accent ?? this.accent,
+      accentSoft: accentSoft ?? this.accentSoft,
       peachLight: peachLight ?? this.peachLight,
       orangeTint: orangeTint ?? this.orangeTint,
       indicatorInactive: indicatorInactive ?? this.indicatorInactive,
@@ -105,9 +123,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
     return AppPalette(
       background: Color.lerp(background, other.background, t)!,
       card: Color.lerp(card, other.card, t)!,
+      elevated: Color.lerp(elevated, other.elevated, t)!,
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
       textMuted: Color.lerp(textMuted, other.textMuted, t)!,
+      accent: Color.lerp(accent, other.accent, t)!,
+      accentSoft: Color.lerp(accentSoft, other.accentSoft, t)!,
       peachLight: Color.lerp(peachLight, other.peachLight, t)!,
       orangeTint: Color.lerp(orangeTint, other.orangeTint, t)!,
       indicatorInactive: Color.lerp(indicatorInactive, other.indicatorInactive, t)!,

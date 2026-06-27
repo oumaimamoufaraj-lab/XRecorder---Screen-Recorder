@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import '../../config/build_features.dart';
-import '../../config/recording_help_content.dart';
 import '../../models/broadcast_audio_debug_report.dart';
-import '../../services/ad_action_service.dart';
+import '../../models/recording_preset.dart';
 import '../../services/recording_service.dart';
 import '../../services/replaykit_service.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_design.dart';
 import '../../theme/context_extensions.dart';
 import '../../widgets/appearance_sheet.dart';
-import '../../widgets/brand_logo.dart';
+import '../../widgets/vault_screen_header.dart';
 import '../../widgets/broadcast_stop_help_dialog.dart';
 import '../../widgets/recording_help_dialog.dart';
 import 'broadcast_audio_debug_panel.dart';
@@ -39,6 +39,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
   Timer? _broadcastStatusTimer;
   String _previousBroadcastStatus = 'idle';
   BroadcastAudioTestMode _broadcastAudioMode = BroadcastAudioTestMode.micOnly;
+  RecordingPreset _preset = RecordingPreset.standard;
 
   bool get _showBroadcastDebugTools => BuildFeatures.showBroadcastAudioDebugTools;
 
@@ -92,6 +93,16 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
     if (imported) {
       widget.onRecordingSaved?.call();
       await _replayKitService.setBroadcastStatus('idle');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Recording saved. ${_preset.hint}',
+            ),
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
     }
     if (_showBroadcastDebugTools) {
       await _showBroadcastAudioDebugReport();
@@ -483,267 +494,344 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
-            if (_isSimulator) ...[
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: palette.simulatorBannerBg,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.primaryOrange.withValues(alpha: 0.4)),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(Icons.phone_iphone, color: AppColors.primaryOrange),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'Screen recording does not work in the iOS Simulator. '
-                        'Connect a physical iPhone and run: flutter run',
-                        style: TextStyle(
-                          fontSize: 13,
-                          height: 1.4,
-                          color: palette.textPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-            ],
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: palette.logoBackground,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const BrandLogo(size: 34, radius: 10, withShadow: false),
-                ),
-                const Spacer(),
-                _RecordHeaderIconButton(
-                  icon: Icons.palette_outlined,
-                  tooltip: 'Appearance',
-                  onPressed: () => showAppearanceSheet(context),
-                ),
-                const SizedBox(width: 6),
-                _RecordHeaderIconButton(
-                  icon: Icons.info_outline,
-                  tooltip: 'Help',
-                  onPressed: () =>
-                      AdActionService.runWithInterstitial(_showRecordingHelp),
-                ),
-              ],
+    final isActive = _isRecording || _broadcastActive;
+
+    return Column(
+      children: [
+        VaultScreenHeader(
+          title: 'Capture',
+          subtitle: _preset.hint,
+          trailing: [
+            VaultIconAction(
+              icon: Icons.palette_outlined,
+              tooltip: 'Appearance',
+              onPressed: () => showAppearanceSheet(context),
             ),
-            const SizedBox(height: 16),
-            Text(
-              'Screen Recording',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: palette.textPrimary,
-              ),
+            const SizedBox(width: 6),
+            VaultIconAction(
+              icon: Icons.help_outline,
+              tooltip: 'Help',
+              onPressed: _showRecordingHelp,
             ),
-            const SizedBox(height: 4),
-            Text(
-              _statusText,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 15,
-                color: palette.textSecondary.withValues(alpha: 0.9),
-              ),
-            ),
-            if (Platform.isIOS) ...[
-              const SizedBox(height: 8),
-              Center(
-                child: _BroadcastStatusChip(
-                  statusText: _statusText,
-                  isRecording: _isRecording,
-                ),
-              ),
-            ],
-            const SizedBox(height: 28),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
-              decoration: BoxDecoration(
-                color: palette.card,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: palette.cardShadow,
-                    blurRadius: 20,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  const BrandLogo(size: 90, radius: 22),
-                  const SizedBox(height: 20),
-                  Text(
-                    _isRecording ? 'Recording in progress' : 'Ready to record',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: palette.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    Platform.isIOS
-                        ? (_broadcastActive
-                            ? 'Stop via the red status bar or Control Center'
-                            : _appOnlyRecording
-                            ? 'Tap Stop to save this in-app session'
-                            : 'Tap Start — turn Microphone ON in Apple’s broadcast sheet')
-                        : _isRecording
-                        ? 'Tap stop to finish and save video'
-                        : 'Tap the button below to start',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: palette.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (Platform.isIOS && _broadcastActive) ...[
-              const SizedBox(height: 16),
-              BroadcastActiveBanner(
-                onHowToStop: () => AdActionService.runWithInterstitial(
-                  _showBroadcastStopHelp,
-                ),
-              ),
-            ],
-            const SizedBox(height: 24),
-            if (_replayKitAvailable) ...[
-              if (_showBroadcastDebugTools) ...[
-                BroadcastAudioDebugPanel(
-                  selectedMode: _broadcastAudioMode,
-                  enabled: !_broadcastActive && !_appOnlyRecording,
-                  onModeChanged: _onBroadcastAudioModeChanged,
-                  onViewReport: () => unawaited(_showBroadcastAudioDebugReport()),
-                ),
-                const SizedBox(height: 12),
-              ],
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: (_broadcastActive || _appOnlyRecording)
-                      ? null
-                      : () => AdActionService.runWithRewardedAsync(
-                          _startAppOnlyRecording,
-                        ),
-                  icon: const Icon(Icons.smartphone_rounded),
-                  label: const Text('Record app only (optional)'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.primaryOrange,
-                    side: BorderSide(
-                      color: AppColors.primaryOrange.withValues(alpha: 0.45),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-            ],
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: _isSimulator
-                    ? null
-                    : () {
-                        if (_broadcastActive ||
-                            (_isRecording && !_appOnlyRecording)) {
-                          AdActionService.runWithInterstitial(
-                            _showBroadcastStopHelp,
-                          );
-                        } else {
-                          AdActionService.runWithRewardedAsync(
-                            _toggleRecording,
-                          );
-                        }
-                      },
-                icon: Icon(
-                  Platform.isIOS && _broadcastActive
-                      ? Icons.stop_circle_outlined
-                      : _isRecording
-                      ? Icons.stop_rounded
-                      : Icons.fiber_manual_record,
-                  size: 22,
-                ),
-                label: Text(
-                  Platform.isIOS && _broadcastActive
-                      ? 'How to Stop Recording'
-                      : _isRecording
-                      ? 'Stop Recording'
-                      : 'Start Recording',
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Platform.isIOS && _broadcastActive
-                      ? Colors.redAccent
-                      : _isRecording
-                      ? Colors.red
-                      : AppColors.primaryOrange,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  textStyle: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            _InfoCard(
-              icon: Icons.touch_app_outlined,
-              iconBgColor: palette.orangeTint,
-              iconColor: AppColors.primaryOrange,
-              title: 'How to Start',
-              description: Platform.isIOS
-                  ? RecordingHelpContent.iosHowToStart
-                  : "Tap Start Recording to begin and Stop Recording to save the video.",
-            ),
-            const SizedBox(height: 12),
-            if (Platform.isIOS)
-              _InfoCard(
-                icon: Icons.stop_circle_outlined,
-                iconBgColor: const Color(0xFFFFEBEE),
-                iconColor: Colors.redAccent,
-                title: 'How to Stop',
-                description: RecordingHelpContent.iosHowToStop,
-              ),
-            if (Platform.isIOS) const SizedBox(height: 12),
-            _InfoCard(
-              icon: Icons.save_outlined,
-              iconBgColor: const Color(0xFFE8F5E9),
-              iconColor: AppColors.greenAccent,
-              title: 'Auto Save',
-              description:
-                  'Finished recordings are saved to Photos and appear in the Videos tab',
-            ),
-            const SizedBox(height: 20),
           ],
         ),
+        if (_isSimulator)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: palette.simulatorBannerBg,
+                borderRadius: BorderRadius.circular(AppDesign.radiusSm),
+                border: Border.all(color: palette.accent.withValues(alpha: 0.3)),
+              ),
+              child: Text(
+                'Simulator detected — use a physical iPhone to record.',
+                style: TextStyle(fontSize: 13, color: palette.textPrimary),
+              ),
+            ),
+          ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: RecordingPreset.values.map((preset) {
+              final selected = _preset == preset;
+              return FilterChip(
+                selected: selected,
+                showCheckmark: false,
+                avatar: Icon(
+                  preset.icon,
+                  size: 16,
+                  color: selected ? Colors.white : palette.accent,
+                ),
+                label: Text(preset.label),
+                selectedColor: palette.accent,
+                backgroundColor: palette.elevated,
+                labelStyle: TextStyle(
+                  color: selected ? Colors.white : palette.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+                onSelected: (_) => setState(() => _preset = preset),
+              );
+            }).toList(),
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: _CaptureStatusRing(
+              isActive: isActive,
+              isRecording: _isRecording,
+              statusText: _statusText,
+              broadcastActive: _broadcastActive,
+            ),
+          ),
+        ),
+        if (Platform.isIOS && _broadcastActive)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: BroadcastActiveBanner(
+              onHowToStop: _showBroadcastStopHelp,
+            ),
+          ),
+        if (_showBroadcastDebugTools && _replayKitAvailable) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: BroadcastAudioDebugPanel(
+              selectedMode: _broadcastAudioMode,
+              enabled: !_broadcastActive && !_appOnlyRecording,
+              onModeChanged: _onBroadcastAudioModeChanged,
+              onViewReport: () => unawaited(_showBroadcastAudioDebugReport()),
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+          decoration: BoxDecoration(
+            color: palette.card,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(AppDesign.radiusLg),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: palette.cardShadow,
+                blurRadius: 16,
+                offset: const Offset(0, -4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _statusText,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: palette.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                Platform.isIOS
+                    ? (_broadcastActive
+                        ? 'Stop via Control Center or status bar'
+                        : 'Mic: enable in Apple\'s broadcast sheet')
+                    : 'Tap the button to start or stop',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 12, color: palette.textSecondary),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (_replayKitAvailable)
+                    _DockIcon(
+                      icon: Icons.smartphone_rounded,
+                      label: 'In-app',
+                      enabled: !_broadcastActive && !_appOnlyRecording,
+                      onTap: (_broadcastActive || _appOnlyRecording)
+                          ? null
+                          : () => unawaited(_startAppOnlyRecording()),
+                    ),
+                  const SizedBox(width: 28),
+                  _CaptureMainButton(
+                    isSimulator: _isSimulator,
+                    isRecording: _isRecording,
+                    broadcastActive: _broadcastActive,
+                    appOnlyRecording: _appOnlyRecording,
+                    onTap: () {
+                      if (_broadcastActive ||
+                          (_isRecording && !_appOnlyRecording)) {
+                        _showBroadcastStopHelp();
+                      } else {
+                        _toggleRecording();
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 28),
+                  _DockIcon(
+                    icon: Icons.lightbulb_outline,
+                    label: 'Tips',
+                    onTap: _showRecordingHelp,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CaptureStatusRing extends StatelessWidget {
+  const _CaptureStatusRing({
+    required this.isActive,
+    required this.isRecording,
+    required this.statusText,
+    required this.broadcastActive,
+  });
+
+  final bool isActive;
+  final bool isRecording;
+  final String statusText;
+  final bool broadcastActive;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    final ringColor = isActive ? AppColors.recordRed : palette.accent;
+
+    return SizedBox(
+      width: 220,
+      height: 220,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 220,
+            height: 220,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: ringColor.withValues(alpha: isActive ? 0.5 : 0.2),
+                width: 3,
+              ),
+            ),
+          ),
+          if (isActive)
+            Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: ringColor.withValues(alpha: 0.08),
+              ),
+            ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                broadcastActive
+                    ? Icons.sensors
+                    : isRecording
+                    ? Icons.stop_rounded
+                    : Icons.videocam_outlined,
+                size: 48,
+                color: ringColor,
+              ),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  isActive ? 'LIVE' : 'STANDBY',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2,
+                    color: palette.textPrimary,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 6),
+              _BroadcastStatusChip(
+                statusText: statusText,
+                isRecording: isRecording,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CaptureMainButton extends StatelessWidget {
+  const _CaptureMainButton({
+    required this.isSimulator,
+    required this.isRecording,
+    required this.broadcastActive,
+    required this.appOnlyRecording,
+    required this.onTap,
+  });
+
+  final bool isSimulator;
+  final bool isRecording;
+  final bool broadcastActive;
+  final bool appOnlyRecording;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = broadcastActive
+        ? AppColors.recordRedGlow
+        : isRecording
+        ? AppColors.recordRed
+        : AppColors.primaryOrange;
+
+    return Material(
+      color: color,
+      elevation: 8,
+      shadowColor: color.withValues(alpha: 0.5),
+      shape: const CircleBorder(),
+      child: InkWell(
+        onTap: isSimulator ? null : onTap,
+        customBorder: const CircleBorder(),
+        child: SizedBox(
+          width: 72,
+          height: 72,
+          child: Icon(
+            broadcastActive
+                ? Icons.help_outline
+                : isRecording
+                ? Icons.stop
+                : Icons.fiber_manual_record,
+            color: Colors.white,
+            size: 32,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DockIcon extends StatelessWidget {
+  const _DockIcon({
+    required this.icon,
+    required this.label,
+    this.onTap,
+    this.enabled = true,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback? onTap;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return Opacity(
+      opacity: enabled ? 1 : 0.4,
+      child: Column(
+        children: [
+          IconButton.filledTonal(
+            onPressed: enabled ? onTap : null,
+            icon: Icon(icon),
+            style: IconButton.styleFrom(
+              backgroundColor: palette.elevated,
+              foregroundColor: palette.accent,
+            ),
+          ),
+          Text(
+            label,
+            style: TextStyle(fontSize: 10, color: palette.textSecondary),
+          ),
+        ],
       ),
     );
   }
@@ -870,117 +958,6 @@ class _BroadcastStatusChipState extends State<_BroadcastStatusChip>
           ),
         );
       },
-    );
-  }
-}
-
-class _InfoCard extends StatelessWidget {
-  const _InfoCard({
-    required this.icon,
-    required this.iconBgColor,
-    required this.iconColor,
-    required this.title,
-    required this.description,
-  });
-
-  final IconData icon;
-  final Color iconBgColor;
-  final Color iconColor;
-  final String title;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    final palette = context.palette;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: palette.card,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: palette.cardShadow,
-            blurRadius: 12,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: iconBgColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: iconColor, size: 22),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: palette.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 14,
-                    height: 1.4,
-                    color: palette.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RecordHeaderIconButton extends StatelessWidget {
-  const _RecordHeaderIconButton({
-    required this.icon,
-    required this.tooltip,
-    required this.onPressed,
-  });
-
-  final IconData icon;
-  final String tooltip;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    final palette = context.palette;
-
-    return Tooltip(
-      message: tooltip,
-      child: Material(
-        color: palette.card,
-        shape: const CircleBorder(),
-        elevation: 0,
-        shadowColor: palette.cardShadow,
-        child: InkWell(
-          onTap: onPressed,
-          customBorder: const CircleBorder(),
-          child: SizedBox(
-            width: 36,
-            height: 36,
-            child: Icon(icon, size: 20, color: palette.textPrimary),
-          ),
-        ),
-      ),
     );
   }
 }

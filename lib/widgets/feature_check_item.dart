@@ -7,10 +7,12 @@ class FeatureCheckItem extends StatelessWidget {
     super.key,
     required this.label,
     required this.accentColor,
+    this.textColor,
   });
 
   final String label;
   final Color accentColor;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class FeatureCheckItem extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: 16,
-                color: context.palette.textPrimary,
+                color: textColor ?? context.palette.textPrimary,
                 fontWeight: FontWeight.w500,
               ),
             ),

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../services/ad_action_service.dart';
+import '../../theme/app_colors.dart';
+import '../../theme/app_design.dart';
 import '../../theme/context_extensions.dart';
-import '../../widgets/brand_logo.dart';
 import '../../widgets/feature_check_item.dart';
-import '../../widgets/gradient_icon_box.dart';
-import '../../widgets/page_indicator.dart';
 import '../home/main_shell.dart';
 import 'onboarding_data.dart';
 
@@ -34,18 +32,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (_currentPage < onboardingPages.length - 1) {
       _controller.nextPage(
         duration: const Duration(milliseconds: 350),
-        curve: Curves.easeInOut,
+        curve: Curves.easeOutCubic,
       );
     } else {
       _finish();
     }
-  }
-
-  void _back() {
-    _controller.previousPage(
-      duration: const Duration(milliseconds: 350),
-      curve: Curves.easeInOut,
-    );
   }
 
   @override
@@ -67,25 +58,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Spacer(),
-                  PageIndicator(
-                    count: onboardingPages.length,
-                    currentIndex: _currentPage,
-                    activeColor: page.accentColor,
+                  Text(
+                    '${_currentPage + 1}/${onboardingPages.length}',
+                    style: TextStyle(
+                      color: palette.textSecondary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  const Spacer(),
                   TextButton(
-                    onPressed: () =>
-                        AdActionService.runWithInterstitial(_finish),
+                    onPressed: _finish,
                     child: Text(
                       'Skip',
-                      style: TextStyle(
-                        color: palette.textSecondary,
-                        fontSize: 16,
-                      ),
+                      style: TextStyle(color: palette.textSecondary),
                     ),
                   ),
                 ],
@@ -98,42 +86,32 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onPageChanged: (index) => setState(() => _currentPage = index),
                 itemBuilder: (context, index) {
                   final data = onboardingPages[index];
-                  final isFirstPage = index == 0;
-                  return SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(28, 24, 28, 0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 40),
-                        if (isFirstPage)
-                          const BrandLogo(size: 110, radius: 28)
-                        else
-                          GradientIconBox(
-                            icon: data.icon,
-                            colors: data.colors,
-                            size: 110,
-                            iconSize: 48,
+                        Container(
+                          width: 64,
+                          height: 64,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(AppDesign.radiusSm),
+                            gradient: LinearGradient(colors: data.colors),
                           ),
-                        const SizedBox(height: 36),
+                          child: Icon(data.icon, color: Colors.white, size: 32),
+                        ),
+                        const SizedBox(height: 28),
                         Text(
                           data.title,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: palette.textPrimary,
-                          ),
+                          style: AppDesign.displayTitle(palette.textPrimary),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 14),
                         Text(
                           data.description,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            height: 1.5,
-                            color: palette.textSecondary,
-                          ),
+                          style: AppDesign.subtitle(palette.textSecondary),
                         ),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 28),
                         ...data.features.map(
                           (feature) => FeatureCheckItem(
                             label: feature,
@@ -149,45 +127,46 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (_currentPage > 0)
-                    TextButton.icon(
-                      onPressed: _back,
-                      icon: const Icon(Icons.arrow_back, size: 18),
-                      label: const Text('Back'),
-                      style: TextButton.styleFrom(
-                        foregroundColor: palette.textSecondary,
+                  for (var i = 0; i < onboardingPages.length; i++)
+                    Expanded(
+                      child: Container(
+                        height: 4,
+                        margin: EdgeInsets.only(
+                          right: i < onboardingPages.length - 1 ? 6 : 0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: i <= _currentPage
+                              ? AppColors.primaryOrange
+                              : palette.indicatorInactive,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
-                    )
-                  else
-                    const SizedBox(width: 80),
-                  ElevatedButton.icon(
-                    onPressed: _next,
-                    icon: Icon(
-                      isLastPage ? Icons.rocket_launch : Icons.arrow_forward,
-                      size: 18,
                     ),
-                    label: Text(isLastPage ? 'Get Started' : 'Next'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: page.accentColor,
-                      foregroundColor: Colors.white,
-                      elevation: 4,
-                      shadowColor: page.accentColor.withValues(alpha: 0.4),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 28,
-                        vertical: 14,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28),
-                      ),
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: _next,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: page.accentColor,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppDesign.radiusSm),
                     ),
                   ),
-                ],
+                  child: Text(
+                    isLastPage ? 'Get started' : 'Continue',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>NowRecorder - Screen Recorder</string>
+	<string>NowRecorder · Privacy Recorder</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>fc_app3_xrecorder</string>
+	<string>NowRecorder</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -25,20 +25,11 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>NowRecorder needs access to your Photos to list and manage recordings.</string>
+	<string>NowRecorder needs Photos access to list your recordings and manage clips for Shield review.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>NowRecorder saves your screen recordings to the Photos library.</string>
+	<string>NowRecorder saves screen recordings and safe redacted exports to your Photos library.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>NowRecorder can include microphone audio while recording.</string>
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
-	<key>SKAdNetworkItems</key>
-	<array>
-		<dict>
-			<key>SKAdNetworkIdentifier</key>
-			<string>cstr6suwn9.skadnetwork</string>
-		</dict>
-	</array>
 	<key>ReplayKitBroadcastExtensionBundleId</key>
 	<string>com.xrecorder.screenVideo.BroadcastExtension</string>
 	<key>LSApplicationQueriesSchemes</key>

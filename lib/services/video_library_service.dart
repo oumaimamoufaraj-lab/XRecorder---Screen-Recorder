@@ -1,12 +1,15 @@
 import 'package:photo_manager/photo_manager.dart';
 
+import 'photos_permission_service.dart';
+
 enum VideoSortMode { newest, oldest, longest }
 
 class VideoLibraryService {
-  Future<bool> hasPermission() async {
-    final permission = await PhotoManager.requestPermissionExtend();
-    return permission.isAuth || permission.hasAccess;
-  }
+  /// Check permission only — does not show the system prompt.
+  Future<bool> hasPermission() => PhotosPermissionService.isAccessGranted();
+
+  /// Request permission — shows the system prompt when needed.
+  Future<bool> requestPermission() => PhotosPermissionService.requestAccess();
 
   Future<List<AssetEntity>> loadVideos({
     int page = 0,

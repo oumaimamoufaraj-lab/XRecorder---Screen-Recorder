@@ -1,9 +1,15 @@
 /// App-wide identity, links, and store metadata.
 abstract final class AppConfig {
-  static const String appDisplayName = 'NowRecorder - Screen Recorder';
+  static const String appDisplayName = 'NowRecorder · Privacy Recorder';
   static const String appName = 'NowRecorder';
+  static const String appTagline = 'Capture screen. Shield what you share.';
+
+  /// App Store subtitle (max 30 characters). Also in docs/app_store_resubmission.md
+  static const String appStoreSubtitle = 'Blur & scan before you share';
+
   static const String packageName = 'com.xrecorder.screenVideo';
 
+  /// Update page titles on these sites to match [appDisplayName] before resubmitting.
   static const String privacyPolicyUrl =
       'https://sites.google.com/view/screen-recorder---xrecorder/home';
 
@@ -20,9 +26,5 @@ abstract final class AppConfig {
       ? 'https://apps.apple.com/app/id$appStoreId?action=write-review'
       : null;
 
-  static const String appVersion = '1.0.5';
-
-  /// AdMob application ID (must match Info.plist / AndroidManifest).
-  /// Replace with your production ID from the AdMob console.
-  static const String admobAppId = 'ca-app-pub-3940256099942544~1458002511';
+  static const String appVersion = '1.1.0';
 }

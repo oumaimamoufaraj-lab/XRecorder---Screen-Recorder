@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../services/ad_action_service.dart';
-import '../../services/app_open_ad_manager.dart';
-import '../../widgets/app_banner_ad.dart';
-import '../../widgets/app_bottom_nav.dart';
+import '../../widgets/vault_bottom_nav.dart';
+import '../privacy/privacy_screen.dart';
 import '../record/record_screen.dart';
 import '../settings/settings_screen.dart';
-import '../tools/tools_screen.dart';
 import '../videos/videos_screen.dart';
+import 'home_screen.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -17,56 +15,48 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
-  AppTab _currentTab = AppTab.record;
+  AppTab _currentTab = AppTab.home;
   final GlobalKey<VideosScreenState> _videosKey = GlobalKey<VideosScreenState>();
+  final GlobalKey<HomeScreenState> _homeKey = GlobalKey<HomeScreenState>();
+  final GlobalKey<PrivacyScreenState> _shieldKey = GlobalKey<PrivacyScreenState>();
 
   void _refreshVideos() {
     _videosKey.currentState?.reloadVideos();
+    _homeKey.currentState?.reload();
+    _shieldKey.currentState?.reload();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      AppOpenAdManager.instance.tryShowOnColdStart();
-    });
+  void _selectTab(AppTab tab) {
+    if (tab == _currentTab) return;
+    setState(() => _currentTab = tab);
+    if (tab == AppTab.clips) {
+      _videosKey.currentState?.reloadVideos(requestPermission: true);
+    }
+    if (tab == AppTab.home) _homeKey.currentState?.reload();
+    if (tab == AppTab.shield) _shieldKey.currentState?.reload();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: IndexedStack(
+        index: _currentTab.index,
         children: [
-          Expanded(
-            child: IndexedStack(
-              index: _currentTab.index,
-              children: [
-                RecordScreen(onRecordingSaved: _refreshVideos),
-                VideosScreen(key: _videosKey),
-                const ToolsScreen(),
-                const SettingsScreen(),
-              ],
-            ),
+          HomeScreen(
+            key: _homeKey,
+            onGoToCapture: () => _selectTab(AppTab.capture),
+            onGoToClips: () => _selectTab(AppTab.clips),
+            onGoToShield: () => _selectTab(AppTab.shield),
           ),
-          const AppBannerAd(),
+          RecordScreen(onRecordingSaved: _refreshVideos),
+          VideosScreen(key: _videosKey),
+          PrivacyScreen(key: _shieldKey),
+          const SettingsScreen(),
         ],
       ),
-      bottomNavigationBar: AppBottomNav(
+      bottomNavigationBar: VaultBottomNav(
         currentTab: _currentTab,
-        onTabSelected: (tab) {
-          if (tab == _currentTab) return;
-          void selectTab() {
-            setState(() => _currentTab = tab);
-            if (tab == AppTab.videos) {
-              _refreshVideos();
-            }
-          }
-          if (tab == AppTab.videos) {
-            AdActionService.runWithRewarded(selectTab);
-          } else {
-            AdActionService.runWithInterstitial(selectTab);
-          }
-        },
+        onTabSelected: _selectTab,
       ),
     );
   }

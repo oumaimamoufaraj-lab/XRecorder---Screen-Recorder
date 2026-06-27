@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/app_colors.dart';
+
 class OnboardingPageData {
   const OnboardingPageData({
     required this.title,
@@ -20,42 +22,44 @@ class OnboardingPageData {
 
 const onboardingPages = [
   OnboardingPageData(
-    title: 'Welcome to NowRecorder',
+    title: 'Privacy-first recording',
     description:
-        'Record your screen with one tap, then manage clips in your Videos library.',
+        'Record your screen on-device — no account, no cloud upload. '
+        'Your clips stay in Photos until you choose to share them.',
     features: [
       'Full-device screen recording',
-      'Saved to Photos automatically',
-      'Play, share, and organize',
+      'Saved locally to Photos',
+      'No sign-in required',
     ],
-    icon: Icons.videocam_rounded,
+    icon: Icons.shield_outlined,
     colors: [Color(0xFFFF8A65), Color(0xFFFF5722)],
-    accentColor: Color(0xFFFF5722),
+    accentColor: AppColors.primaryOrange,
   ),
   OnboardingPageData(
-    title: 'Screen Recording',
+    title: 'Record with confidence',
     description:
-        'Start Recording opens Apple’s broadcast picker. Turn the microphone on in Apple’s sheet for audio.',
+        'Start Recording opens Apple’s broadcast picker. Turn the microphone '
+        'on in Apple’s sheet when you need audio.',
     features: [
       'Apple broadcast picker',
       'Microphone for audio',
       'Optional in-app recording',
     ],
     icon: Icons.fiber_manual_record_rounded,
-    colors: [Color(0xFF80CBC4), Color(0xFF4DB6AC)],
-    accentColor: Color(0xFF4DB6AC),
+    colors: [Color(0xFFFFB74D), Color(0xFFF57C00)],
+    accentColor: AppColors.splashOrange,
   ),
   OnboardingPageData(
-    title: 'Videos & Tools',
+    title: 'Protect in Privacy Studio',
     description:
-        'Browse recordings in Videos. Use Video Info to inspect a clip. More tools will arrive in future updates.',
+        'Scan for emails and phone numbers, add blur regions, and export a safe copy — all on your device.',
     features: [
-      'Thumbnails and quick actions',
-      'Video Info details',
-      'Pull to refresh',
+      'Privacy Score scan',
+      'Manual blur regions',
+      'Safe export to Photos',
     ],
-    icon: Icons.video_library_rounded,
-    colors: [Color(0xFFFFB74D), Color(0xFFF57C00)],
-    accentColor: Color(0xFFF57C00),
+    icon: Icons.verified_user_outlined,
+    colors: [Color(0xFFFFAB91), Color(0xFFFF7043)],
+    accentColor: AppColors.primaryOrangeLight,
   ),
 ];

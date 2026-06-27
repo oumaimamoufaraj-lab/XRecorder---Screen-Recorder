@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screen_recording/flutter_screen_recording.dart';
 import 'package:photo_manager/photo_manager.dart';
 
+import 'photos_permission_service.dart';
 import 'replaykit_service.dart';
 
 class RecordingResult {
@@ -25,8 +26,8 @@ class RecordingService {
   bool get isRecording => _appOnlyRecording;
 
   Future<bool> requestMediaPermissions() async {
-    final permission = await PhotoManager.requestPermissionExtend();
-    return permission.isAuth || permission.hasAccess;
+    PhotosPermissionService.unlockLibraryBrowse();
+    return PhotosPermissionService.requestAccess();
   }
 
   /// iOS: opens Apple's broadcast picker for full-device recording.

@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/app_config.dart';
-import '../../services/ad_action_service.dart';
-import '../../services/consent_service.dart';
 import '../../services/replaykit_service.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_design.dart';
 import '../../theme/context_extensions.dart';
+import '../../widgets/appearance_sheet.dart';
 import '../../widgets/recording_help_dialog.dart';
+import '../../widgets/vault_screen_header.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -21,24 +22,17 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final ReplayKitService _replayKit = ReplayKitService();
   bool _isSimulator = false;
-  bool _showPrivacyChoices = false;
 
   @override
   void initState() {
     super.initState();
     _loadSimulatorFlag();
-    _loadPrivacyChoicesFlag();
   }
 
   Future<void> _loadSimulatorFlag() async {
     if (!Platform.isIOS) return;
     final isSimulator = await _replayKit.isSimulator();
     if (mounted) setState(() => _isSimulator = isSimulator);
-  }
-
-  Future<void> _loadPrivacyChoicesFlag() async {
-    final required = await ConsentService.isPrivacyOptionsRequired();
-    if (mounted) setState(() => _showPrivacyChoices = required);
   }
 
   Future<void> _openUrl(String url) async {
@@ -64,8 +58,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Text(
             'NowRecorder saves screen recordings to your device Photos library. '
             'Recordings stay on your device unless you choose to share them.\n\n'
-            'The app requests Photos access to save and list your recordings, and '
-            'microphone access when you turn the microphone on during a broadcast.\n\n'
+            'Shield Studio scans for emails and phone numbers on-device, lets you '
+            'add blur regions, and can export a redacted copy — no account required '
+            'and no video content is uploaded to our servers.\n\n'
+            'Photos access is requested when you open Clips or start recording. '
+            'Microphone access is optional during a broadcast.\n\n'
             'Read the full privacy policy on our website.',
           ),
         ),
@@ -89,129 +86,96 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final supportTiles = <Widget>[
-      if (AppConfig.showRateApp)
-        _SettingsTile(
-          icon: Icons.star_outline_rounded,
-          iconColor: const Color(0xFFFFB300),
-          title: 'Rate App',
-          subtitle: 'Enjoying NowRecorder? Leave a review',
-          onTap: () => _openUrl(AppConfig.appStoreReviewUrl!),
-        ),
-      _SettingsTile(
-        icon: Icons.support_agent_outlined,
-        iconColor: AppColors.purple,
-        title: 'Contact Support',
-        subtitle: 'Help and support page',
-        onTap: () => _openUrl(AppConfig.supportUrl),
-      ),
-    ];
 
-    return SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
-        children: [
-          Text(
-            'Settings',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: palette.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 20),
-          _SettingsSection(
-            title: 'App',
-            children: [
-              _SettingsTile(
-                icon: Icons.help_outline_rounded,
-                iconColor: AppColors.teal,
-                title: 'Help / How to record',
-                subtitle: 'Broadcast picker, microphone, and saving',
-                onTap: () => AdActionService.runWithInterstitial(() {
-                  showRecordingHelpDialog(
-                    context,
-                    isSimulator: _isSimulator,
-                  );
-                }),
-              ),
-              _SettingsTile(
-                icon: Icons.privacy_tip_outlined,
-                iconColor: AppColors.linkBlue,
-                title: 'Privacy Policy',
-                onTap: _showPrivacyPolicy,
-              ),
-              if (_showPrivacyChoices)
-                _SettingsTile(
-                  icon: Icons.ads_click_outlined,
-                  iconColor: AppColors.teal,
-                  title: 'Ad privacy choices',
-                  subtitle: 'Manage consent for personalized ads',
-                  onTap: () => ConsentService.showPrivacyOptionsForm(),
-                ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          _SettingsSection(
-            title: 'Support',
-            children: supportTiles,
-          ),
-          const SizedBox(height: 24),
-          Center(
-            child: Text(
-              '${AppConfig.appDisplayName} · v${AppConfig.appVersion}',
-              style: TextStyle(
-                fontSize: 13,
-                color: palette.textSecondary.withValues(alpha: 0.8),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SettingsSection extends StatelessWidget {
-  const _SettingsSection({required this.title, required this.children});
-
-  final String title;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    final palette = context.palette;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
+      padding: const EdgeInsets.only(bottom: 24),
       children: [
+        VaultScreenHeader(
+          title: 'Menu',
+          subtitle: 'Preferences & support',
+        ),
         Padding(
-          padding: const EdgeInsets.only(left: 4, bottom: 8),
-          child: Text(
-            title.toUpperCase(),
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.6,
-              color: palette.textSecondary.withValues(alpha: 0.85),
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+          child: Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.primaryOrange, AppColors.splashOrange],
+              ),
+              borderRadius: BorderRadius.circular(AppDesign.radiusLg),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(AppDesign.radiusSm),
+                  ),
+                  child: const Icon(Icons.enhanced_encryption, color: Colors.white),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppConfig.appDisplayName,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        'v${AppConfig.appVersion} · On-device only',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.8),
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
-        Material(
-          color: palette.card,
-          borderRadius: BorderRadius.circular(14),
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            children: [
-              for (var i = 0; i < children.length; i++) ...[
-                if (i > 0)
-                  Divider(
-                    height: 1,
-                    indent: 56,
-                    color: palette.divider,
-                  ),
-                children[i],
-              ],
-            ],
+        _MenuTile(
+          icon: Icons.dark_mode_outlined,
+          title: 'Appearance',
+          subtitle: 'Light or dark theme',
+          onTap: () => showAppearanceSheet(context),
+        ),
+        _MenuTile(
+          icon: Icons.help_outline_rounded,
+          title: 'Recording guide',
+          onTap: () => showRecordingHelpDialog(context, isSimulator: _isSimulator),
+        ),
+        _MenuTile(
+          icon: Icons.privacy_tip_outlined,
+          title: 'Privacy policy',
+          onTap: _showPrivacyPolicy,
+        ),
+        if (AppConfig.showRateApp)
+          _MenuTile(
+            icon: Icons.star_outline_rounded,
+            title: 'Rate the app',
+            onTap: () => _openUrl(AppConfig.appStoreReviewUrl!),
+          ),
+        _MenuTile(
+          icon: Icons.support_agent_outlined,
+          title: 'Contact support',
+          onTap: () => _openUrl(AppConfig.supportUrl),
+        ),
+        const SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            'All recordings and privacy scans stay on your device.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 13, color: palette.textSecondary),
           ),
         ),
       ],
@@ -219,56 +183,49 @@ class _SettingsSection extends StatelessWidget {
   }
 }
 
-class _SettingsTile extends StatelessWidget {
-  const _SettingsTile({
+class _MenuTile extends StatelessWidget {
+  const _MenuTile({
     required this.icon,
     required this.title,
     this.subtitle,
-    this.iconColor,
     this.onTap,
   });
 
   final IconData icon;
   final String title;
   final String? subtitle;
-  final Color? iconColor;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    return ListTile(
-      onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-      leading: Container(
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: (iconColor ?? AppColors.primaryOrange).withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(10),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+      child: Material(
+        color: palette.card,
+        borderRadius: BorderRadius.circular(AppDesign.radiusMd),
+        clipBehavior: Clip.antiAlias,
+        child: ListTile(
+          onTap: onTap,
+          leading: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: palette.accentSoft,
+              borderRadius: BorderRadius.circular(AppDesign.radiusSm),
+            ),
+            child: Icon(icon, color: palette.accent, size: 20),
+          ),
+          title: Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.w700, color: palette.textPrimary),
+          ),
+          subtitle: subtitle != null
+              ? Text(subtitle!, style: TextStyle(color: palette.textSecondary))
+              : null,
+          trailing: Icon(Icons.chevron_right, color: palette.textSecondary),
         ),
-        child: Icon(icon, size: 20, color: iconColor ?? AppColors.primaryOrange),
       ),
-      title: Text(
-        title,
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 15,
-          color: palette.textPrimary,
-        ),
-      ),
-      subtitle: subtitle != null
-          ? Text(
-              subtitle!,
-              style: TextStyle(fontSize: 13, color: palette.textSecondary),
-            )
-          : null,
-      trailing: onTap != null
-              ? Icon(
-                  Icons.chevron_right,
-                  color: palette.textSecondary.withValues(alpha: 0.5),
-                )
-          : null,
     );
   }
 }

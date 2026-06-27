@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app_colors.dart';
+import 'app_design.dart';
 import 'app_palette.dart';
 
 abstract final class AppTheme {
@@ -14,6 +15,8 @@ abstract final class AppTheme {
     final colorScheme = ColorScheme.fromSeed(
       seedColor: AppColors.primaryOrange,
       brightness: brightness,
+      primary: palette.accent,
+      secondary: AppColors.primaryOrangeLight,
       surface: palette.card,
     );
 
@@ -23,13 +26,17 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: palette.background,
       colorScheme: colorScheme,
       extensions: [palette],
-      fontFamily: '.SF Pro Text',
       appBarTheme: AppBarTheme(
         elevation: 0,
         scrolledUnderElevation: 0,
-        backgroundColor: palette.background,
+        backgroundColor: Colors.transparent,
         foregroundColor: palette.textPrimary,
-        centerTitle: true,
+        centerTitle: false,
+        titleTextStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: palette.textPrimary,
+        ),
         systemOverlayStyle: isDark
             ? SystemUiOverlayStyle.light
             : SystemUiOverlayStyle.dark,
@@ -37,67 +44,74 @@ abstract final class AppTheme {
       cardTheme: CardThemeData(
         color: palette.card,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDesign.radiusMd),
+        ),
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: palette.card,
         surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        titleTextStyle: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: palette.textPrimary,
-        ),
-        contentTextStyle: TextStyle(
-          fontSize: 15,
-          height: 1.45,
-          color: palette.textSecondary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDesign.radiusLg),
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: palette.card,
         surfaceTintColor: Colors.transparent,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(AppDesign.radiusLg),
+          ),
         ),
       ),
       dividerTheme: DividerThemeData(color: palette.divider, thickness: 1),
-      iconTheme: IconThemeData(color: palette.textPrimary),
-      textTheme: TextTheme(
-        bodyLarge: TextStyle(color: palette.textPrimary),
-        bodyMedium: TextStyle(color: palette.textSecondary),
-        titleLarge: TextStyle(
-          color: palette.textPrimary,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryOrange,
+          backgroundColor: palette.accent,
           foregroundColor: Colors.white,
           elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppDesign.radiusSm),
+          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.primaryOrange,
+          backgroundColor: palette.accent,
           foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppDesign.radiusSm),
+          ),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(foregroundColor: AppColors.primaryOrange),
+        style: TextButton.styleFrom(foregroundColor: palette.accent),
+      ),
+      chipTheme: ChipThemeData(
+        selectedColor: palette.accent,
+        labelStyle: TextStyle(color: palette.textPrimary),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDesign.radiusSm),
+        ),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: isDark ? const Color(0xFF2C2C2E) : palette.textPrimary,
+        backgroundColor: isDark ? palette.elevated : AppColors.textPrimary,
         contentTextStyle: const TextStyle(color: Colors.white),
         behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDesign.radiusSm),
+        ),
       ),
-      listTileTheme: ListTileThemeData(
-        iconColor: palette.textSecondary,
-        textColor: palette.textPrimary,
-      ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: AppColors.primaryOrange,
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: palette.accent),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: AppColors.primaryOrange,
+        foregroundColor: Colors.white,
+        elevation: 6,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDesign.radiusMd),
+        ),
       ),
     );
   }
