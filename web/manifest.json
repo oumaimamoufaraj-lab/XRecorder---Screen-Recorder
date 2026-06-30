@@ -1,6 +1,6 @@
 {
-    "name": "NowRecorder · Privacy Recorder",
-    "short_name": "NowRecorder",
+    "name": "ShieldRec - Screen Recorder",
+    "short_name": "ShieldRec",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

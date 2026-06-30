@@ -141,7 +141,7 @@ class RecordingService {
         );
       }
 
-      await FlutterScreenRecording.startRecordScreen('NowRecorder');
+      await FlutterScreenRecording.startRecordScreen('ShieldRec');
       _appOnlyRecording = true;
       return const RecordingResult(success: true);
     } on PlatformException catch (e) {
@@ -218,7 +218,7 @@ class RecordingService {
         );
       }
 
-      await PhotoManager.editor.saveVideo(videoFile, title: 'NowRecorder');
+      await PhotoManager.editor.saveVideo(videoFile, title: 'ShieldRec');
 
       return RecordingResult(
         success: true,

@@ -118,8 +118,7 @@ class PrivacyScreenState extends State<PrivacyScreen> {
   Widget build(BuildContext context) {
     final palette = context.palette;
 
-    return SafeArea(
-      child: RefreshIndicator(
+    return RefreshIndicator(
         onRefresh: _loadDashboard,
         color: AppColors.privacyTeal,
         child: CustomScrollView(
@@ -257,7 +256,6 @@ class PrivacyScreenState extends State<PrivacyScreen> {
             ),
           ],
         ),
-      ),
     );
   }
 }

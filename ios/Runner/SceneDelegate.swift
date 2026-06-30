@@ -289,7 +289,7 @@ class SceneDelegate: FlutterSceneDelegate {
     guard #available(iOS 14.0, *) else {
       completion(
         NSError(
-          domain: "NowRecorder",
+          domain: "ShieldRec",
           code: 2,
           userInfo: [NSLocalizedDescriptionKey: "Saving videos requires iOS 14 or later."]
         )
@@ -301,7 +301,7 @@ class SceneDelegate: FlutterSceneDelegate {
       guard status == .authorized || status == .limited else {
         completion(
           NSError(
-            domain: "NowRecorder",
+            domain: "ShieldRec",
             code: 1,
             userInfo: [NSLocalizedDescriptionKey: "Photos permission denied."]
           )

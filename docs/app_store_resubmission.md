@@ -1,6 +1,22 @@
 # App Store resubmission — Guideline 4.3(a)
 
-Use this when submitting **NowRecorder · Privacy Recorder** v1.1 after the 4.3(a) rejection.
+Use this when submitting **ShieldRec - Screen Recorder** v1.1 after the 4.3(a) rejection.
+
+---
+
+## Bundle IDs (Apple Developer portal)
+
+Register these App IDs and enable **App Groups** on all three:
+
+| Target | Bundle ID |
+|--------|-----------|
+| Main app | `com.xrecorder.screenVideo` |
+| Broadcast extension | `com.xrecorder.screenVideo.BroadcastExtension` |
+| Setup UI extension | `com.xrecorder.screenVideo.BroadcastUploadExtensionSetupUI` |
+
+**App Group** (same on all three): `group.com.xrecorder.screenvideo.shared`
+
+Codemagic provisioning profiles must match these bundle IDs (see `codemagic.yaml` comments).
 
 ---
 
@@ -9,26 +25,28 @@ Use this when submitting **NowRecorder · Privacy Recorder** v1.1 after the 4.3(
 - **Privacy-first product:** Shield Studio with on-device OCR scan (emails/phones), manual blur regions, Privacy Score, safe redacted export, and Safe Share confirmation — not a generic record-and-share app.
 - **Custom UI:** Vault layout (Home, Capture, Clips, Shield, Menu) designed around the record → review → share workflow.
 - **No ads:** All advertising and consent flows removed.
-- **Respectful permissions:** Photos access is requested only when the user opens Clips or starts recording — not on launch.
+- **Respectful permissions:** Photos access is requested when the user opens Home (recent clips) or Clips, and when recording starts — not before onboarding completes.
+- **Dark mode default** with optional light mode toggle on Home.
 
 ---
 
 ## App Review notes (paste into App Store Connect)
 
 ```
-Thank you for reviewing NowRecorder · Privacy Recorder.
+Thank you for reviewing ShieldRec - Screen Recorder.
 
 This app is NOT a generic screen recorder. It is a privacy-first recorder with a built-in Shield workflow for reviewing and redacting sensitive content before sharing.
 
 HOW TO TEST THE DIFFERENTIATING FEATURES (2–3 minutes):
 
 1. Open the app and complete onboarding (3 screens — the third explains Shield / Privacy Studio).
-2. Tap Capture (center red button) → Start Recording → use Apple’s broadcast picker to record briefly (physical iPhone required).
-3. Open the Clips tab → allow Photos if prompted → open a recording.
-4. Tap Shield Studio (or open the Shield tab → Protect on a clip).
-5. Tap Scan — on-device OCR finds emails/phone numbers and shows a Privacy Score.
-6. Add blur regions on sensitive areas, then use Safe Export to save a redacted copy to Photos.
-7. Use Safe Share — the app shows the Privacy Score and warns before sharing.
+2. On Home, allow Photos if prompted — recent clips appear on the hub.
+3. Tap Capture (center red button) → Start Recording → use Apple’s broadcast picker to record briefly (physical iPhone required).
+4. Open the Clips tab → open a recording.
+5. Tap Shield Studio (or open the Shield tab → Protect on a clip).
+6. Tap Scan — on-device OCR finds emails/phone numbers and shows a Privacy Score.
+7. Add blur regions on sensitive areas, then use Safe Export to save a redacted copy to Photos.
+8. Use Safe Share — the app shows the Privacy Score and warns before sharing.
 
 All processing (OCR, blur metadata, export) runs ON-DEVICE. No account, no cloud upload of video content.
 
@@ -60,7 +78,7 @@ Record your screen, then scan for emails and phones, blur sensitive areas, and e
 ## Description (App Store)
 
 ```
-NowRecorder is a privacy-first screen recorder. Capture your screen, then use Shield to review and redact sensitive information before you share — all on your device.
+ShieldRec is a privacy-first screen recorder. Capture your screen, then use Shield to review and redact sensitive information before you share — all on your device.
 
 WHY NOWRECORDER IS DIFFERENT
 • Shield Studio — scan recordings for emails and phone numbers with on-device OCR
@@ -78,7 +96,7 @@ RECORD WITH CONFIDENCE
 PRIVATE BY DESIGN
 • No account required
 • No cloud upload of your recordings
-• Photos permission only when you open Clips or record
+• Photos permission when you open Home or Clips, or start recording
 • No advertisements
 
 Perfect for tutorials, support videos, and any recording you need to share without leaking personal data.
@@ -116,15 +134,21 @@ Declare as applicable:
 - **No tracking** (ads removed)  
 - **Data not collected** for video content (on-device processing)
 
+Privacy manifest: `ios/Runner/PrivacyInfo.xcprivacy` (UserDefaults only, no tracking).
+
+Export compliance: `ITSAppUsesNonExemptEncryption = false` in Info.plist.
+
 ---
 
 ## Before you upload
 
+- [ ] App IDs + App Group registered for `screenVideo` bundle IDs (see table above)  
+- [ ] Codemagic provisioning profiles updated for `com.xrecorder.screenVideo` (+ both extensions)  
 - [ ] Test on a **physical iPhone** (ReplayKit does not work in Simulator)  
-- [ ] Clean install: confirm **no Photos prompt on Home launch**  
-- [ ] Run `flutter build ipa` / Codemagic after `pod install` (ad SDKs removed)  
-- [ ] Update Google Sites privacy/support pages to say **NowRecorder · Privacy Recorder** (URLs can stay; page titles should match)  
-- [ ] Increment build number in `pubspec.yaml` for each upload (current: **1.1.0+5**)
+- [ ] Clean install: onboarding first, then Photos prompt on Home when clips load  
+- [ ] Run `flutter build ipa` / Codemagic after `pod install`  
+- [ ] Update Google Sites privacy/support pages to say **ShieldRec - Screen Recorder** (URLs can stay; page titles should match)  
+- [ ] Increment build number in `pubspec.yaml` for each upload (current: **1.1.0+6**)
 
 ---
 

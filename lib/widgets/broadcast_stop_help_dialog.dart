@@ -41,7 +41,7 @@ Future<void> showBroadcastStopHelpDialog(BuildContext context) {
             ),
             const SizedBox(height: 8),
             Text(
-              'Full-screen broadcast is controlled by iOS. NowRecorder cannot stop it from inside the app.',
+              'Full-screen broadcast is controlled by iOS. ShieldRec cannot stop it from inside the app.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
@@ -62,7 +62,7 @@ Future<void> showBroadcastStopHelpDialog(BuildContext context) {
             const SizedBox(height: 10),
             const _StopStep(
               number: '3',
-              text: 'Reopen NowRecorder so your recording can import and save to Photos.',
+              text: 'Reopen ShieldRec so your recording can import and save to Photos.',
             ),
             const SizedBox(height: 20),
             SizedBox(

@@ -12,14 +12,14 @@ class BroadcastSetupViewController: UIViewController {
     view.backgroundColor = UIColor(red: 0.973, green: 0.976, blue: 0.980, alpha: 1.0)
 
     let titleLabel = UILabel()
-    titleLabel.text = "NowRecorder"
+    titleLabel.text = "ShieldRec"
     titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
     titleLabel.textAlignment = .center
     titleLabel.textColor = UIColor(red: 0.102, green: 0.102, blue: 0.102, alpha: 1.0)
 
     let messageLabel = UILabel()
     messageLabel.text =
-      "Tap Start Broadcast to begin full-screen recording with NowRecorder."
+      "Tap Start Broadcast to begin full-screen recording with ShieldRec."
     messageLabel.font = .systemFont(ofSize: 16, weight: .regular)
     messageLabel.textAlignment = .center
     messageLabel.numberOfLines = 0
@@ -71,7 +71,7 @@ class BroadcastSetupViewController: UIViewController {
   private func userDidFinishSetup() {
     let broadcastURL = URL(string: "https://nowrecorder.local/broadcast")!
     let setupInfo: [String: NSCoding & NSObjectProtocol] = [
-      "broadcastName": "NowRecorder" as NSString,
+      "broadcastName": "ShieldRec" as NSString,
     ]
     extensionContext?.completeRequest(withBroadcast: broadcastURL, setupInfo: setupInfo)
   }

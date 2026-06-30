@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import '../../config/build_features.dart';
+import '../../controllers/recording_status_controller.dart';
 import '../../models/broadcast_audio_debug_report.dart';
 import '../../models/recording_preset.dart';
 import '../../services/recording_service.dart';
@@ -70,7 +71,18 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _broadcastStatusTimer?.cancel();
+    recordingStatusController.clear();
     super.dispose();
+  }
+
+  void _publishGlobalRecordingStatus() {
+    recordingStatusController.update(
+      isActive: _isRecording || _broadcastActive,
+      isRecording: _isRecording,
+      broadcastActive: _broadcastActive,
+      appOnlyRecording: _appOnlyRecording,
+      statusLabel: _statusText,
+    );
   }
 
   @override
@@ -212,6 +224,14 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
         _statusText = text;
       });
     }
+
+    recordingStatusController.update(
+      isActive: isRecording || broadcastActive,
+      isRecording: isRecording,
+      broadcastActive: broadcastActive,
+      appOnlyRecording: _appOnlyRecording,
+      statusLabel: text,
+    );
   }
 
   Future<void> _handleRecordingSaved() async {
@@ -313,7 +333,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
           'iOS will ask you to confirm screen broadcast.\n\n'
           '1. Tap Continue to open Apple’s broadcast menu.\n'
           '2. Turn Microphone ON (required for audio).\n'
-          '3. Select NowRecorder in the list.\n'
+          '3. Select ShieldRec in the list.\n'
           '4. Tap Start Broadcast.\n'
           '5. Stop from the red status bar or Control Center.',
         ),
@@ -332,6 +352,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
               if (!mounted) return;
               if (result.success) {
                 setState(() => _statusText = 'Confirm broadcast in Apple’s picker');
+                unawaited(_syncBroadcastStatus());
               } else {
                 messenger.showSnackBar(
                   SnackBar(content: Text(result.error ?? 'Could not open broadcast picker.')),
@@ -375,6 +396,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
             _isRecording = false;
             _statusText = 'Saved to Photos';
           });
+          _publishGlobalRecordingStatus();
           widget.onRecordingSaved?.call();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('In-app recording saved to Photos.')),
@@ -385,6 +407,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
             _isRecording = false;
             _statusText = 'Ready to record';
           });
+          _publishGlobalRecordingStatus();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(result.error ?? 'Failed to stop recording.')),
           );
@@ -412,6 +435,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
           _isRecording = false;
           _statusText = 'Saved to Photos';
         });
+        _publishGlobalRecordingStatus();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Recording saved to Photos.')),
         );
@@ -420,6 +444,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
           _isRecording = false;
           _statusText = 'Ready to record';
         });
+        _publishGlobalRecordingStatus();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(result.error ?? 'Failed to stop recording.')),
         );
@@ -441,6 +466,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
         _isRecording = true;
         _statusText = 'Recording...';
       });
+      _publishGlobalRecordingStatus();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result.error ?? 'Could not start recording.')),
@@ -484,6 +510,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
         _isRecording = true;
         _statusText = 'Recording in-app only…';
       });
+      _publishGlobalRecordingStatus();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result.error ?? 'Could not start in-app recording.')),
@@ -902,7 +929,7 @@ class _BroadcastStatusChipState extends State<_BroadcastStatusChip>
       dotColor = Colors.orange;
     } else if (widget.isRecording || widget.statusText == 'Recording...') {
       dotColor = Colors.green;
-    } else if (widget.statusText == 'Select NowRecorder in Broadcast Picker') {
+    } else if (widget.statusText == 'Select ShieldRec in Broadcast Picker') {
       dotColor = AppColors.primaryOrange;
     }
 

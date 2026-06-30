@@ -8,6 +8,11 @@ workflows:
       flutter: 3.41.0
       ios_signing:
         distribution_type: app_store
+        # Profiles in Codemagic must map to these bundle IDs:
+        #   com.xrecorder.screenVideo
+        #   com.xrecorder.screenVideo.BroadcastExtension
+        #   com.xrecorder.screenVideo.BroadcastUploadExtensionSetupUI
+        # App Group on all three: group.com.xrecorder.screenvideo.shared
         provisioning_profiles:
           - provisioning_xrecorder
           - xrecorder_broadcast_extension

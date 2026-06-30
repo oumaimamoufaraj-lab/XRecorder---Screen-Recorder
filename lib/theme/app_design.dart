@@ -30,8 +30,8 @@ abstract final class AppDesign {
   static TextStyle displayTitle(Color color) => TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.w800,
-        letterSpacing: -0.8,
-        height: 1.1,
+        letterSpacing: -0.2,
+        height: 1.15,
         color: color,
       );
 

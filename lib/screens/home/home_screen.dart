@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
+import '../../controllers/theme_controller.dart';
+import '../../services/theme_preference_service.dart';
 import '../../config/app_config.dart';
 import '../../services/photos_permission_service.dart';
 import '../../models/privacy_video_state.dart';
@@ -36,33 +38,22 @@ class HomeScreenState extends State<HomeScreen> {
   List<AssetEntity> _recent = const [];
   Map<String, PrivacyVideoState> _states = {};
   bool _loading = false;
+  bool _permissionDenied = false;
 
   @override
   void initState() {
     super.initState();
+    reload();
   }
 
   Future<void> reload() async {
-    if (!PhotosPermissionService.canBrowseLibrary) {
-      if (mounted) {
-        setState(() {
-          _clipCount = 0;
-          _needsReview = 0;
-          _protected = 0;
-          _recent = const [];
-          _states = {};
-          _loading = false;
-        });
-      }
-      return;
-    }
-
     setState(() => _loading = true);
     try {
-      final granted = await PhotosPermissionService.isAccessGranted();
+      final granted = await PhotosPermissionService.requestAccess();
       if (!granted) {
         if (mounted) {
           setState(() {
+            _permissionDenied = true;
             _clipCount = 0;
             _needsReview = 0;
             _protected = 0;
@@ -85,6 +76,7 @@ class HomeScreenState extends State<HomeScreen> {
       final states = await _storage.loadMany(assets.map((a) => a.id));
       if (!mounted) return;
       setState(() {
+        _permissionDenied = false;
         _clipCount = assets.length;
         _recent = assets.take(6).toList();
         _states = states;
@@ -116,6 +108,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
+    final themeController = ThemeScope.of(context);
 
     return RefreshIndicator(
       onRefresh: reload,
@@ -127,10 +120,29 @@ class HomeScreenState extends State<HomeScreen> {
             child: VaultScreenHeader(
               title: AppConfig.appName,
               subtitle: AppConfig.appTagline,
+              trailing: [
+                ListenableBuilder(
+                  listenable: themeController,
+                  builder: (context, _) {
+                    final dark = Theme.of(context).brightness == Brightness.dark;
+                    return VaultIconAction(
+                      icon: dark
+                          ? Icons.light_mode_outlined
+                          : Icons.dark_mode_outlined,
+                      tooltip: dark ? 'Light mode' : 'Dark mode',
+                      onPressed: () => themeController.setPreference(
+                        dark
+                            ? AppThemePreference.light
+                            : AppThemePreference.dark,
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
             sliver: SliverToBoxAdapter(
               child: Row(
                 children: [
@@ -201,12 +213,27 @@ class HomeScreenState extends State<HomeScreen> {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(32),
-                child: Text(
-                  PhotosPermissionService.canBrowseLibrary
-                      ? 'No clips yet. Tap the red capture button to record.'
-                      : 'Open Clips or record to see your library here.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: palette.textSecondary),
+                child: Column(
+                  children: [
+                    Text(
+                      _permissionDenied
+                          ? 'Photos access is needed to show your recent clips.'
+                          : 'No clips yet. Tap the red capture button to record.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: palette.textSecondary),
+                    ),
+                    if (_permissionDenied) ...[
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: PhotoManager.openSetting,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryOrange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text('Open Settings'),
+                      ),
+                    ],
+                  ],
                 ),
               ),
             )

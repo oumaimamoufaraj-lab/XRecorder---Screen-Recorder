@@ -28,7 +28,7 @@ abstract final class ThemePreferenceService {
     return switch (value) {
       'dark' => AppThemePreference.dark,
       'system' => AppThemePreference.system,
-      _ => AppThemePreference.light,
+      _ => AppThemePreference.dark,
     };
   }
 

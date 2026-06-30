@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>NowRecorder saves your screen broadcast recordings to Photos.</string>
+	<string>ShieldRec saves your screen broadcast recordings to Photos.</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionPointIdentifier</key>

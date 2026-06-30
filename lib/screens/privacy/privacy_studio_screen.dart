@@ -510,8 +510,17 @@ class _ToolChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = onTap != null;
-    final bg = highlighted ? AppColors.privacyTeal : Colors.white.withValues(alpha: 0.08);
-    final fg = highlighted ? Colors.white : Colors.white.withValues(alpha: enabled ? 0.95 : 0.4);
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
+    final bg = highlighted
+        ? AppColors.privacyTeal
+        : (isLight ? Colors.white : Colors.white.withValues(alpha: 0.08));
+
+    final fg = highlighted
+        ? Colors.white
+        : isLight
+        ? (enabled ? AppColors.textPrimary : AppColors.textMuted)
+        : Colors.white.withValues(alpha: enabled ? 0.95 : 0.4);
 
     return ActionChip(
       onPressed: onTap,
@@ -519,7 +528,11 @@ class _ToolChip extends StatelessWidget {
       label: Text(label),
       backgroundColor: bg,
       labelStyle: TextStyle(color: fg, fontWeight: FontWeight.w600),
-      side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
+      side: BorderSide(
+        color: isLight
+            ? AppColors.indicatorInactive.withValues(alpha: 0.5)
+            : Colors.white.withValues(alpha: 0.08),
+      ),
     );
   }
 }

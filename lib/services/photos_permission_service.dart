@@ -4,13 +4,12 @@ import 'package:photo_manager/photo_manager.dart';
 abstract final class PhotosPermissionService {
   static const _requestOption = PermissionRequestOption();
 
-  /// Set after the user opens Clips or starts a recording — gates Home/Shield
-  /// from touching the photo library on launch (even if OS permission exists).
+  /// Set after Photos access is granted (Home, Clips, or recording).
   static bool libraryBrowseUnlocked = false;
 
   static bool get canBrowseLibrary => libraryBrowseUnlocked;
 
-  /// Call when the user explicitly opens Clips or begins recording.
+  /// Call when the user opens Home (recent clips), Clips, or begins recording.
   static void unlockLibraryBrowse() {
     libraryBrowseUnlocked = true;
   }

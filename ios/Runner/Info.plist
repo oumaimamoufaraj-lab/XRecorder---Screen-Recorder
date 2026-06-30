@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>NowRecorder · Privacy Recorder</string>
+	<string>ShieldRec - Screen Recorder</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>NowRecorder</string>
+	<string>ShieldRec</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -25,11 +25,11 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>NowRecorder needs Photos access to list your recordings and manage clips for Shield review.</string>
+	<string>ShieldRec needs Photos access to list your recordings and manage clips for Shield review.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>NowRecorder saves screen recordings and safe redacted exports to your Photos library.</string>
+	<string>ShieldRec saves screen recordings and safe redacted exports to your Photos library.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>NowRecorder can include microphone audio while recording.</string>
+	<string>ShieldRec can include microphone audio while recording.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>ReplayKitBroadcastExtensionBundleId</key>

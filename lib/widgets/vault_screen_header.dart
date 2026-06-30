@@ -18,8 +18,9 @@ class VaultScreenHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
+    final topInset = MediaQuery.paddingOf(context).top;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 8, 12, 4),
+      padding: EdgeInsets.fromLTRB(20, topInset + 8, 12, 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -29,6 +30,8 @@ class VaultScreenHeader extends StatelessWidget {
               children: [
                 Text(
                   title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: AppDesign.displayTitle(palette.textPrimary),
                 ),
                 if (subtitle != null) ...[

@@ -1,4 +1,4 @@
-# NowRecorder · Privacy Recorder
+# ShieldRec - Screen Recorder
 
 Privacy-first screen recorder for iOS and Android.
 
@@ -12,7 +12,7 @@ Record your screen on-device with no account required. Before sharing, use **Shi
 - **Safe Export** — redacted video export to Photos via on-device FFmpeg
 - **Safe Share** — confirmation with privacy status before sharing
 - **Video Info** — inspect resolution, duration, and format
-- No ads · No cloud upload · Photos access only when you open Clips or record
+- No ads · No cloud upload · Photos access on Home, Clips, or when you record
 
 ## App Store resubmission
 

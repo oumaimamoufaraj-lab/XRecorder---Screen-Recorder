@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "xrecorder.screenVideo"
+    namespace = "com.xrecorder.screenVideo"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
