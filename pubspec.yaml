@@ -1,7 +1,7 @@
 name: now_recorder
 description: ShieldRec - Privacy-first screen recorder
 publish_to: 'none'
-version: 1.0.6+0
+version: 1.0.6+1
 
 environment:
   sdk: ^3.11.0

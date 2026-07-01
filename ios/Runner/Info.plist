@@ -30,6 +30,8 @@
 	<string>ShieldRec saves screen recordings and safe redacted exports to your Photos library.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>ShieldRec can include microphone audio while recording.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>ShieldRec does not use your camera. This description is required because media libraries used for screen recording and clip processing reference camera APIs on iOS.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>ReplayKitBroadcastExtensionBundleId</key>
